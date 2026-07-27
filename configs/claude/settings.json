@@ -14,7 +14,8 @@
   },
   "enabledPlugins": {
     "ponytail@ponytail": true,
-    "humanizer@humanizer": true
+    "humanizer@humanizer": true,
+    "superpowers@superpowers-marketplace": true
   },
   "extraKnownMarketplaces": {
     "ponytail": {
@@ -27,6 +28,12 @@
       "source": {
         "source": "github",
         "repo": "blader/humanizer"
+      }
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
       }
     }
   },

@@ -37,7 +37,6 @@ version is the source of truth; the existing file is backed up first).
 |-------|---------|
 | [caveman](skills/caveman/SKILL.md) | Ultra-compressed communication mode, cuts token usage ~75% |
 | [handoff](skills/handoff/SKILL.md) | Compact the current conversation into a handoff doc for another agent |
-| [write-a-skill](skills/write-a-skill/SKILL.md) | Create new agent skills with proper structure |
 
 ### Plugins
 
@@ -48,6 +47,7 @@ Claude Code installs them automatically on next launch once settings.json is syn
 |--------|---------|
 | [ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, YAGNI-driven solutions (stdlib/native before dependencies) |
 | [humanizer](https://github.com/blader/humanizer) | Rewrites responses to sound more natural, less AI-generated |
+| [superpowers](https://github.com/obra/superpowers) | Skills library: TDD, debugging, planning, code review, writing skills (replaces this repo's old `write-a-skill`) |
 
 ### MCP servers
 
