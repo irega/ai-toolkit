@@ -3,6 +3,13 @@ set -euo pipefail
 
 # ai-toolkit bootstrap
 
+REPO_SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
+
+echo "Linking skills..."
+bash "$REPO_SCRIPTS/link-skills.sh"
+
+echo ""
+
 if ! command -v brew &>/dev/null; then
   echo "ERROR: Homebrew not found. Install it first: https://brew.sh"
   exit 1
@@ -19,3 +26,12 @@ if ! command -v rtk &>/dev/null; then
 fi
 rtk init -g --auto-patch
 echo "RTK configured ($(rtk --version))."
+
+echo ""
+
+# Claude Code settings.json (model, hooks, plugins) — repo is source of truth
+read -p "Sync ~/.claude/settings.json from this repo? [y/N] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  bash "$REPO_SCRIPTS/sync-config.sh"
+fi

@@ -20,3 +20,11 @@ cd ai-toolkit
 | Tool | Purpose |
 |------|---------|
 | [RTK](https://www.rtk-ai.app/) | CLI proxy that cuts token usage on dev commands |
+
+It also symlinks everything in `skills/` into `~/.claude/skills`, and offers to
+sync `~/.claude/settings.json` from `configs/claude/settings.json` (this repo's
+version is the source of truth; the existing file is backed up first).
+
+`configs/claude/settings.json` enables the [ponytail](https://github.com/DietrichGebert/ponytail)
+plugin via `extraKnownMarketplaces`/`enabledPlugins` — Claude Code installs it
+automatically on next launch once synced, no extra step needed.
