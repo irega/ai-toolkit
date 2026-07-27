@@ -25,6 +25,7 @@ cd ai-toolkit
 | [RTK](https://www.rtk-ai.app/) | CLI proxy that cuts token usage on dev commands |
 | [OpenSpec](https://github.com/Fission-AI/OpenSpec) | Spec-driven planning, run `openspec init` per project to enable |
 | [CodeGraph](https://github.com/colbymchenry/codegraph) | Local code knowledge graph MCP server, run `codegraph init` per project to enable |
+| [Headroom](https://github.com/chopratejas/headroom) | Compresses Claude Code's own API traffic via a local proxy (complements RTK, which rewrites shell commands); installed via `uv tool install`, wired in by `headroom init -g claude` (hooks + `ANTHROPIC_BASE_URL` in `settings.json`) |
 
 It also symlinks everything in `skills/` into `~/.claude/skills`, and offers to
 sync `~/.claude/settings.json` from `configs/claude/settings.json` (this repo's
