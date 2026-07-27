@@ -63,3 +63,15 @@ if command -v claude &>/dev/null; then
 else
   echo "Skipping MCP server registration (claude CLI unavailable)."
 fi
+
+echo ""
+
+# 6. OpenSpec
+if command -v npm &>/dev/null; then
+  echo "Installing OpenSpec..."
+  npm install -g @fission-ai/openspec@latest
+  echo "OpenSpec installed. Run 'openspec init' inside each project to enable planning."
+else
+  echo "WARNING: npm not found. OpenSpec not installed."
+  echo "    Install Node.js first, then: npm install -g @fission-ai/openspec@latest"
+fi

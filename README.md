@@ -23,6 +23,7 @@ cd ai-toolkit
 | Tool | Purpose |
 |------|---------|
 | [RTK](https://www.rtk-ai.app/) | CLI proxy that cuts token usage on dev commands |
+| [OpenSpec](https://github.com/Fission-AI/OpenSpec) | Spec-driven planning, run `openspec init` per project to enable |
 
 It also symlinks everything in `skills/` into `~/.claude/skills`, and offers to
 sync `~/.claude/settings.json` from `configs/claude/settings.json` (this repo's
