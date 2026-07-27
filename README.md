@@ -16,6 +16,10 @@ cd ai-toolkit
 ./scripts/install.sh
 ```
 
+It also symlinks everything in `skills/` into `~/.claude/skills`, and offers to
+sync `~/.claude/settings.json` from `configs/claude/settings.json` (this repo's
+version is the source of truth; the existing file is backed up first).
+
 ## What it installs
 
 ### Tools
@@ -25,17 +29,13 @@ cd ai-toolkit
 | [RTK](https://www.rtk-ai.app/) | CLI proxy that cuts token usage on dev commands |
 | [OpenSpec](https://github.com/Fission-AI/OpenSpec) | Spec-driven planning, run `openspec init` per project to enable |
 | [CodeGraph](https://github.com/colbymchenry/codegraph) | Local code knowledge graph MCP server, run `codegraph init` per project to enable |
+| [Caveman](https://github.com/JuliusBrussee/caveman) | Ultra-compressed communication mode, cuts token usage ~75% (requires Node) |
 | [Headroom](https://github.com/chopratejas/headroom) | Compresses Claude Code's own API traffic via a local proxy (complements RTK, which rewrites shell commands); installed via `uv tool install`, wired in by `headroom init -g claude` (hooks + `ANTHROPIC_BASE_URL` in `settings.json`) |
-
-It also symlinks everything in `skills/` into `~/.claude/skills`, and offers to
-sync `~/.claude/settings.json` from `configs/claude/settings.json` (this repo's
-version is the source of truth; the existing file is backed up first).
 
 ### Skills
 
 | Skill | Purpose |
 |-------|---------|
-| [caveman](skills/caveman/SKILL.md) | Ultra-compressed communication mode, cuts token usage ~75% |
 | [handoff](skills/handoff/SKILL.md) | Compact the current conversation into a handoff doc for another agent |
 
 ### Plugins

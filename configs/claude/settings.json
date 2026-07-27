@@ -1,17 +1,6 @@
 {
   "model": "sonnet",
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo 'use caveman mode'"
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "enabledPlugins": {
     "ponytail@ponytail": true,
     "humanizer@humanizer": true,

@@ -103,3 +103,14 @@ fi
 uv tool install --python 3.13 "headroom-ai[all]"
 headroom init -g claude
 echo "Headroom configured ($(headroom --version))."
+
+echo ""
+
+# 9. Caveman: ultra-compressed communication mode
+if command -v node &>/dev/null; then
+  echo "Installing Caveman..."
+  curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
+else
+  echo "WARNING: node not found. Caveman not installed."
+  echo "    Install Node.js first, then: curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash"
+fi
