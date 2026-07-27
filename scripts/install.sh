@@ -39,3 +39,25 @@ echo ""
 # 4. Skills
 echo "Linking skills..."
 bash "$REPO_SCRIPTS/link-skills.sh"
+
+echo ""
+
+# 5. MCP servers
+if ! command -v claude &>/dev/null; then
+  echo "'claude' CLI not found."
+  if command -v npm &>/dev/null; then
+    echo "Installing Claude Code..."
+    npm install -g @anthropic-ai/claude-code
+  else
+    echo "WARNING: npm not found. Install Claude Code first:"
+    echo "    npm install -g @anthropic-ai/claude-code"
+    echo "    or see https://docs.claude.com/en/docs/claude-code/setup"
+  fi
+fi
+
+if command -v claude &>/dev/null; then
+  echo "Registering MCP servers..."
+  bash "$REPO_SCRIPTS/sync-mcp.sh"
+else
+  echo "Skipping MCP server registration (claude CLI unavailable)."
+fi

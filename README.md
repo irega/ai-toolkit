@@ -6,6 +6,7 @@ Clone it on a new machine, run the installer, start working.
 ## Requirements
 
 - macOS with [Homebrew](https://brew.sh)
+- npm (get it via [nvm](https://github.com/nvm-sh/nvm))
 
 ## Install
 
@@ -44,6 +45,18 @@ Claude Code installs them automatically on next launch once settings.json is syn
 |--------|---------|
 | [ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, YAGNI-driven solutions (stdlib/native before dependencies) |
 
+### MCP servers
+
+Registered with `claude mcp add --scope user` from `configs/claude/mcp.json`.
+
+| Server | Purpose |
+|--------|---------|
+| [playwright](https://github.com/microsoft/playwright-mcp) | Browser automation (Chrome extension mode) |
+
+Some servers may need env vars (e.g. an extension token). Copy `.env.example` to
+`.env.local` and fill it in before running `sync-mcp.sh` — values get injected
+into the server registration.
+
 ## Scripts
 
 `install.sh` runs all of these, but each can also be run standalone:
@@ -53,3 +66,4 @@ Claude Code installs them automatically on next launch once settings.json is syn
 | `scripts/sync-config.sh` | Re-sync `~/.claude/settings.json` from this repo (with backup) |
 | `scripts/clean-config-backups.sh [keep_count]` | Delete old `settings.json.backup.*` files (`DRY_RUN=1` to preview) |
 | `scripts/link-skills.sh` | (Re-)symlink `skills/` into `~/.claude/skills` |
+| `scripts/sync-mcp.sh` | Re-register MCP servers from `configs/claude/mcp.json` |
