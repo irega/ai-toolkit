@@ -5,17 +5,15 @@ set -euo pipefail
 
 REPO_SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
 
-echo "Linking skills..."
-bash "$REPO_SCRIPTS/link-skills.sh"
-
-echo ""
-
+# 1. Homebrew
 if ! command -v brew &>/dev/null; then
   echo "ERROR: Homebrew not found. Install it first: https://brew.sh"
   exit 1
 fi
 
-# RTK: token-saving CLI proxy.
+echo ""
+
+# 2. RTK: token-saving CLI proxy.
 # `rtk init -g --auto-patch` creates filters.toml + ~/.claude/RTK.md,
 # adds @RTK.md to the global CLAUDE.md and patches the PreToolUse hook
 # into ~/.claude/settings.json.
@@ -29,9 +27,15 @@ echo "RTK configured ($(rtk --version))."
 
 echo ""
 
-# Claude Code settings.json (model, hooks, plugins) — repo is source of truth
+# 3. Claude Code settings.json (model, hooks, plugins) — repo is source of truth
 read -p "Sync ~/.claude/settings.json from this repo? [y/N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
   bash "$REPO_SCRIPTS/sync-config.sh"
 fi
+
+echo ""
+
+# 4. Skills
+echo "Linking skills..."
+bash "$REPO_SCRIPTS/link-skills.sh"

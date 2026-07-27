@@ -25,6 +25,17 @@ It also symlinks everything in `skills/` into `~/.claude/skills`, and offers to
 sync `~/.claude/settings.json` from `configs/claude/settings.json` (this repo's
 version is the source of truth; the existing file is backed up first).
 
-`configs/claude/settings.json` enables the [ponytail](https://github.com/DietrichGebert/ponytail)
-plugin via `extraKnownMarketplaces`/`enabledPlugins` — Claude Code installs it
-automatically on next launch once synced, no extra step needed.
+## Skills
+
+| Skill | Purpose |
+|-------|---------|
+| [caveman](skills/caveman/SKILL.md) | Ultra-compressed communication mode, cuts token usage ~75% |
+
+## Plugins
+
+Enabled via `extraKnownMarketplaces`/`enabledPlugins` in `configs/claude/settings.json` —
+Claude Code installs them automatically on next launch once settings.json is synced.
+
+| Plugin | Purpose |
+|--------|---------|
+| [ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, YAGNI-driven solutions (stdlib/native before dependencies) |
