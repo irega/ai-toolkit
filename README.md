@@ -17,6 +17,8 @@ cd ai-toolkit
 
 ## What it installs
 
+### Tools
+
 | Tool | Purpose |
 |------|---------|
 | [RTK](https://www.rtk-ai.app/) | CLI proxy that cuts token usage on dev commands |
@@ -25,13 +27,13 @@ It also symlinks everything in `skills/` into `~/.claude/skills`, and offers to
 sync `~/.claude/settings.json` from `configs/claude/settings.json` (this repo's
 version is the source of truth; the existing file is backed up first).
 
-## Skills
+### Skills
 
 | Skill | Purpose |
 |-------|---------|
 | [caveman](skills/caveman/SKILL.md) | Ultra-compressed communication mode, cuts token usage ~75% |
 
-## Plugins
+### Plugins
 
 Enabled via `extraKnownMarketplaces`/`enabledPlugins` in `configs/claude/settings.json` —
 Claude Code installs them automatically on next launch once settings.json is synced.
@@ -39,3 +41,13 @@ Claude Code installs them automatically on next launch once settings.json is syn
 | Plugin | Purpose |
 |--------|---------|
 | [ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, YAGNI-driven solutions (stdlib/native before dependencies) |
+
+## Scripts
+
+`install.sh` runs all of these, but each can also be run standalone:
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/sync-config.sh` | Re-sync `~/.claude/settings.json` from this repo (with backup) |
+| `scripts/clean-config-backups.sh [keep_count]` | Delete old `settings.json.backup.*` files (`DRY_RUN=1` to preview) |
+| `scripts/link-skills.sh` | (Re-)symlink `skills/` into `~/.claude/skills` |
