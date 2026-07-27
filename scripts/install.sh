@@ -37,6 +37,8 @@ fi
 echo ""
 
 # 4. Skills
+echo "Cleaning up broken skill symlinks..."
+bash "$REPO_SCRIPTS/unlink-skills.sh"
 echo "Linking skills..."
 bash "$REPO_SCRIPTS/link-skills.sh"
 
