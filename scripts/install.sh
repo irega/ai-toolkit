@@ -75,3 +75,16 @@ else
   echo "WARNING: npm not found. OpenSpec not installed."
   echo "    Install Node.js first, then: npm install -g @fission-ai/openspec@latest"
 fi
+
+echo ""
+
+# 7. CodeGraph
+if command -v npm &>/dev/null; then
+  echo "Installing CodeGraph..."
+  npm install -g @colbymchenry/codegraph
+  codegraph install
+  echo "CodeGraph installed. Run 'codegraph init' inside each project to build its graph."
+else
+  echo "WARNING: npm not found. CodeGraph not installed."
+  echo "    Install Node.js first, then: npm install -g @colbymchenry/codegraph"
+fi
