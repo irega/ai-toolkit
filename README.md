@@ -32,6 +32,8 @@ version is the source of truth; the existing file is backed up first).
 | Skill | Purpose |
 |-------|---------|
 | [caveman](skills/caveman/SKILL.md) | Ultra-compressed communication mode, cuts token usage ~75% |
+| [handoff](skills/handoff/SKILL.md) | Compact the current conversation into a handoff doc for another agent |
+| [write-a-skill](skills/write-a-skill/SKILL.md) | Create new agent skills with proper structure |
 
 ### Plugins
 
