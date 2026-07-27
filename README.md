@@ -44,6 +44,7 @@ Claude Code installs them automatically on next launch once settings.json is syn
 | Plugin | Purpose |
 |--------|---------|
 | [ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, YAGNI-driven solutions (stdlib/native before dependencies) |
+| [humanizer](https://github.com/blader/humanizer) | Rewrites responses to sound more natural, less AI-generated |
 
 ### MCP servers
 
