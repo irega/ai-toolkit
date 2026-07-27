@@ -67,4 +67,5 @@ into the server registration.
 | `scripts/sync-config.sh` | Re-sync `~/.claude/settings.json` from this repo (with backup) |
 | `scripts/clean-config-backups.sh [keep_count]` | Delete old `settings.json.backup.*` files (`DRY_RUN=1` to preview) |
 | `scripts/link-skills.sh` | (Re-)symlink `skills/` into `~/.claude/skills` |
+| `scripts/unlink-skills.sh` | Remove broken skill symlinks from `~/.claude/skills` |
 | `scripts/sync-mcp.sh` | Re-register MCP servers from `configs/claude/mcp.json` |
