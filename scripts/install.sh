@@ -107,9 +107,12 @@ echo "Headroom configured ($(headroom --version))."
 echo ""
 
 # 9. Caveman: ultra-compressed communication mode
+# Runs from $HOME: with Codex present, its installer drops project-local
+# skill files (.agents/skills, skills-lock.json) into the cwd instead of a
+# global dir, which would otherwise leak into whatever repo we're run from.
 if command -v node &>/dev/null; then
   echo "Installing Caveman..."
-  curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
+  (cd "$HOME" && curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash)
 else
   echo "WARNING: node not found. Caveman not installed."
   echo "    Install Node.js first, then: curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash"
