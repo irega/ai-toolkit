@@ -106,7 +106,16 @@ echo "Headroom configured ($(headroom --version))."
 
 echo ""
 
-# 9. Caveman: ultra-compressed communication mode
+# 9. GitHub CLI: used by Claude Code for PRs, issues, checks, releases
+if ! command -v gh &>/dev/null; then
+  echo "gh not found, installing..."
+  brew install gh
+fi
+echo "gh configured ($(gh --version | head -1))."
+
+echo ""
+
+# 10. Caveman: ultra-compressed communication mode
 # Runs from $HOME: with Codex present, its installer drops project-local
 # skill files (.agents/skills, skills-lock.json) into the cwd instead of a
 # global dir, which would otherwise leak into whatever repo we're run from.

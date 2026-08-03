@@ -31,6 +31,7 @@ version is the source of truth; the existing file is backed up first).
 | [CodeGraph](https://github.com/colbymchenry/codegraph) | Local code knowledge graph MCP server, run `codegraph init` per project to enable |
 | [Caveman](https://github.com/JuliusBrussee/caveman) | Ultra-compressed communication mode, cuts token usage ~75% (requires Node) |
 | [Headroom](https://github.com/chopratejas/headroom) | Compresses Claude Code's own API traffic via a local proxy (complements RTK, which rewrites shell commands); installed via `uv tool install`, wired in by `headroom init -g claude` (hooks + `ANTHROPIC_BASE_URL` in `settings.json`) |
+| [GitHub CLI](https://cli.github.com/) | `gh` — used by Claude Code for PRs, issues, checks, releases |
 
 ### Skills
 
