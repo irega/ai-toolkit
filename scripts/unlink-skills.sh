@@ -5,6 +5,8 @@ set -euo pipefail
 
 DEST="$HOME/.claude/skills"
 
+[ -d "$DEST" ] || exit 0
+
 find "$DEST" -maxdepth 1 -type l -print0 |
 while IFS= read -r -d '' link; do
   if [ ! -e "$link" ]; then
