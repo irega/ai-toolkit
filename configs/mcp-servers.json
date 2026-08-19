@@ -1,0 +1,11 @@
+{
+  "servers": [
+    {
+      "name": "playwright",
+      "type": "local",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--browser", "chrome", "--extension"],
+      "envKeys": ["PLAYWRIGHT_MCP_EXTENSION_TOKEN"]
+    }
+  ]
+}
