@@ -98,7 +98,18 @@ fi
 
 echo ""
 
-# 9. Caveman: ultra-compressed communication mode
+# 9. Ponytail: lazy/minimal-code coding skill, cross-agent skill
+if command -v npx &>/dev/null; then
+  echo "Installing Ponytail..."
+  npx --yes skills add DietrichGebert/ponytail --global -y
+else
+  echo "WARNING: npx not found. Ponytail not installed."
+  echo "    Install Node.js first, then: npx skills add DietrichGebert/ponytail --global -y"
+fi
+
+echo ""
+
+# 10. Caveman: ultra-compressed communication mode
 # Runs from $HOME: with Codex present, its installer drops project-local
 # skill files (.agents/skills, skills-lock.json) into the cwd instead of a
 # global dir, which would otherwise leak into whatever repo we're run from.
