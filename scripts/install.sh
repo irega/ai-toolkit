@@ -131,3 +131,23 @@ else
   echo "WARNING: node not found. Caveman not installed."
   echo "    Install Node.js first, then: curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash"
 fi
+
+echo ""
+
+# 12. Engram: persistent memory MCP server, cross-agent
+echo "Setting up Engram..."
+if ! command -v engram &>/dev/null; then
+  echo "Engram not found, installing..."
+  brew install gentleman-programming/tap/engram
+fi
+if command -v claude &>/dev/null; then
+  claude plugin marketplace add Gentleman-Programming/engram
+  claude plugin install engram
+fi
+if command -v codex &>/dev/null; then
+  engram setup codex
+fi
+if command -v opencode &>/dev/null; then
+  engram setup opencode
+fi
+echo "Engram configured ($(engram version 2>/dev/null || echo installed))."

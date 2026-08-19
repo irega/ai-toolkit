@@ -32,6 +32,7 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | [CodeGraph](https://github.com/colbymchenry/codegraph) | Local code knowledge graph MCP server, run `codegraph init` per project to enable |
 | [Caveman](https://github.com/JuliusBrussee/caveman) | Ultra-compressed communication mode, cuts token usage ~75% (requires Node) |
 | [GitHub CLI](https://cli.github.com/) | `gh` — used by Claude Code for PRs, issues, checks, releases |
+| [Engram](https://github.com/Gentleman-Programming/engram) | Persistent memory MCP server (SQLite + FTS5), agent-agnostic |
 
 ### Skills
 
