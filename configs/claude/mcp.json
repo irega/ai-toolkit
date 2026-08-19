@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["@playwright/mcp@latest", "--browser", "chrome", "--extension"],
-      "env": {}
-    }
-  }
-}
