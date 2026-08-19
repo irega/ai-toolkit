@@ -87,7 +87,18 @@ echo "gh configured ($(gh --version | head -1))."
 
 echo ""
 
-# 8. Caveman: ultra-compressed communication mode
+# 8. Humanizer: rewrites AI-sounding prose, cross-agent skill
+if command -v npx &>/dev/null; then
+  echo "Installing Humanizer..."
+  npx --yes skills add blader/humanizer --global -y
+else
+  echo "WARNING: npx not found. Humanizer not installed."
+  echo "    Install Node.js first, then: npx skills add blader/humanizer --global -y"
+fi
+
+echo ""
+
+# 9. Caveman: ultra-compressed communication mode
 # Runs from $HOME: with Codex present, its installer drops project-local
 # skill files (.agents/skills, skills-lock.json) into the cwd instead of a
 # global dir, which would otherwise leak into whatever repo we're run from.

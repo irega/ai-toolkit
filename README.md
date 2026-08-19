@@ -38,6 +38,7 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | Skill | Purpose |
 |-------|---------|
 | [handoff](skills/handoff/SKILL.md) | Compact the current conversation into a handoff doc for another agent |
+| [Humanizer](https://github.com/blader/humanizer) | Rewrite AI-sounding prose to read naturally, installed cross-agent via `npx skills add` |
 
 ### MCP servers
 
