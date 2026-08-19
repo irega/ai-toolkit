@@ -109,7 +109,18 @@ fi
 
 echo ""
 
-# 10. Caveman: ultra-compressed communication mode
+# 10. Superpowers: brainstorming/TDD/debugging process skills, cross-agent
+if command -v npx &>/dev/null; then
+  echo "Installing Superpowers..."
+  npx --yes skills add obra/superpowers --global -y
+else
+  echo "WARNING: npx not found. Superpowers not installed."
+  echo "    Install Node.js first, then: npx skills add obra/superpowers --global -y"
+fi
+
+echo ""
+
+# 11. Caveman: ultra-compressed communication mode
 # Runs from $HOME: with Codex present, its installer drops project-local
 # skill files (.agents/skills, skills-lock.json) into the cwd instead of a
 # global dir, which would otherwise leak into whatever repo we're run from.
