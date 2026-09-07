@@ -120,7 +120,18 @@ fi
 
 echo ""
 
-# 11. Caveman: ultra-compressed communication mode
+# 11. HumanLayer show-me: explains topics with diagrams/HTML artifacts, cross-agent skill
+if command -v npx &>/dev/null; then
+  echo "Installing HumanLayer show-me..."
+  npx --yes skills add humanlayer/skills --skill show-me --global -y
+else
+  echo "WARNING: npx not found. HumanLayer show-me not installed."
+  echo "    Install Node.js first, then: npx skills add humanlayer/skills --skill show-me --global -y"
+fi
+
+echo ""
+
+# 12. Caveman: ultra-compressed communication mode
 # Runs from $HOME: with Codex present, its installer drops project-local
 # skill files (.agents/skills, skills-lock.json) into the cwd instead of a
 # global dir, which would otherwise leak into whatever repo we're run from.
@@ -134,7 +145,7 @@ fi
 
 echo ""
 
-# 12. Engram: persistent memory MCP server, cross-agent
+# 13. Engram: persistent memory MCP server, cross-agent
 echo "Setting up Engram..."
 if ! command -v engram &>/dev/null; then
   echo "Engram not found, installing..."

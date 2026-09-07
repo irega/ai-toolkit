@@ -42,6 +42,7 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | [Humanizer](https://github.com/blader/humanizer) | Rewrite AI-sounding prose to read naturally, installed cross-agent via `npx skills add` |
 | [Ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, lazy-first code solutions, installed cross-agent via `npx skills add` |
 | [Superpowers](https://github.com/obra/superpowers) | Process skills (brainstorming, TDD, systematic debugging, plan writing, code review...), installed cross-agent via `npx skills add` |
+| [show-me](https://github.com/humanlayer/skills) | Explains the current topic with concise diagrams, code-shape sketches, and focused HTML artifacts, installed cross-agent via `npx skills add` |
 
 ### MCP servers
 
