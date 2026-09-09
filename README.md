@@ -33,6 +33,7 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | [Caveman](https://github.com/JuliusBrussee/caveman) | Ultra-compressed communication mode, cuts token usage ~75% (requires Node) |
 | [GitHub CLI](https://cli.github.com/) | `gh` — used by Claude Code for PRs, issues, checks, releases |
 | [Engram](https://github.com/Gentleman-Programming/engram) | Persistent memory MCP server (SQLite + FTS5), agent-agnostic |
+| [CodeBurn](https://github.com/getagentseal/codeburn) | Local AI coding token and cost tracking across tools and agents |
 
 ### Skills
 

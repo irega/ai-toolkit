@@ -162,3 +162,15 @@ if command -v opencode &>/dev/null; then
   engram setup opencode
 fi
 echo "Engram configured ($(engram version 2>/dev/null || echo installed))."
+
+echo ""
+
+# 14. CodeBurn: local AI coding token and cost tracking
+if command -v npm &>/dev/null; then
+  echo "Installing CodeBurn..."
+  npm install -g codeburn
+  echo "CodeBurn installed ($(codeburn --version 2>/dev/null || echo installed))."
+else
+  echo "WARNING: npm not found. CodeBurn not installed."
+  echo "    Install Node.js first, then: npm install -g codeburn"
+fi
