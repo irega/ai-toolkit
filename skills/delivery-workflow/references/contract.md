@@ -31,8 +31,7 @@ retry, in the Engram checkpoint for that phase (fallback evidence).
 2. `delivery-discovery` — produce source spec/plan, acceptance criteria,
    risks, tests, tasks with dependencies.
 3. `delivery-implement` — strict TDD per independent deliverable, parallelize
-   only independent tasks, apply Ponytail/YAGNI. Record E2E-evidence
-   requirements in task DoD. Do not run Playwright MCP in this phase.
+   only independent tasks, apply Ponytail/YAGNI.
 4. `delivery-verify` — run repo checks and acceptance/spec conformance;
    fresh-context reviews (correctness, simplicity, design, conventions,
    security when relevant); select E2E evidence by hierarchy (existing repo
