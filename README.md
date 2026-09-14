@@ -68,3 +68,4 @@ get injected into the server registration.
 | `scripts/unlink-skills.sh` | Remove broken skill symlinks from all three skill directories |
 | `scripts/mcp/sync-mcp.sh` | Dispatcher: registers MCP servers from `configs/mcp-servers.json` into whichever of claude/codex/opencode are installed |
 | `scripts/mcp/sync-mcp-<assistant>.sh` | Register MCP servers with one specific assistant (`claude`, `codex`, or `opencode`) only |
+typo fix line
