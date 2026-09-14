@@ -6,16 +6,16 @@ description: Use when starting phase 4 of the delivery workflow (after delivery-
 # delivery-verify
 
 Phase 4 of the delivery workflow (see `../delivery-workflow/references/contract.md`
-for the full phase list and tier contract). Reviews run at the `standard`
-tier.
+for the full phase list and tier contract).
 
-## Step 1: conformance
+## Step 1: conformance — `economy` tier
 
 Run the repo's existing checks (lint, build, test suite) and compare the
 diff against the discovery artifact's acceptance criteria one by one. This
-phase does not implement fixes — see Step 4.
+is a mechanical pass/fail check, not judgment — run it at the `economy`
+tier. This phase does not implement fixes — see Step 4.
 
-## Step 2: fresh-context reviews
+## Step 2: fresh-context reviews — `standard` tier
 
 Dispatch each of these as its own fresh-context pass (a subagent, or a
 genuinely separate context if the runtime has no subagent support — never
