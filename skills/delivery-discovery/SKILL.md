@@ -9,23 +9,34 @@ Phase 2 of the delivery workflow (see `../delivery-workflow/references/contract.
 for the full phase list and tier contract). Run this phase at the
 `high_reasoning` tier — a weak plan here compounds into every later phase.
 
-## Step 1: pick a planning convention
+## Step 1: pick where the artifact lives
 
-In this order, use the first that applies:
+Detect the project's existing convention, in this order:
 
-1. **OpenSpec already in use** (an `openspec/` dir exists) — run `openspec
-   explore` if the request is ambiguous or open-ended, `openspec propose` if
-   it's already clear what to build.
-2. **Another spec/plan convention already in use** in this repo (ADRs,
-   `SPEC.md`/`PRD.md`, issue templates, a docs/specs dir) — follow that
-   convention instead of introducing a new one.
-3. **Neither exists** — fall back to `superpowers:brainstorming` (unclear
-   intent) or `superpowers:writing-plans` (clear intent, needs a plan).
+1. **OpenSpec already in use** (an `openspec/` dir exists) — the artifact is
+   an OpenSpec change: run `openspec explore` if the request is ambiguous or
+   open-ended, `openspec propose` if it's already clear what to build.
+2. **Another spec/plan convention already in use** (ADRs, `SPEC.md`/`PRD.md`,
+   issue templates, a docs/specs dir) — the artifact goes into that
+   convention's existing format and location.
+3. **Neither exists** — no convention to follow; the artifact is whatever
+   `writing-plans` (below) produces.
 
-Never invent a fourth convention. Adopting OpenSpec or any other convention
-for a project that doesn't already use one is out of scope for this phase.
+Never invent a new convention for a project that doesn't already have one.
 
-## Step 2: the output artifact is REQUIRED to have these five parts
+## Step 2: get to the content
+
+Convention (step 1) is *where the artifact lives*; this is *how you reason
+your way to its content* — they're independent, use both together:
+
+- Unclear or open-ended intent → `superpowers:brainstorming` first.
+- Once intent is clear → `superpowers:writing-plans` to structure it.
+
+Whatever these produce gets written into the format from step 1 — e.g. an
+existing `SPEC.md` convention still gets a `writing-plans`-quality plan, just
+committed as an update to `SPEC.md`, not as a new standalone doc.
+
+## Step 3: the output artifact is REQUIRED to have these five parts
 
 Whatever convention produced it, the artifact this phase hands to
 `delivery-implement` must contain all five, explicitly labeled — a technical
