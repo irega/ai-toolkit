@@ -15,11 +15,11 @@ for the full phase list and tier contract — this skill doesn't restate it).
    spec/plan artifacts (ADRs, `SPEC.md`, `PRD.md`, issue templates). Record
    what you found — don't initialize a convention that isn't already in use;
    adopting one is a `delivery-discovery` decision, not this phase's.
-2. **CodeGraph.** If `.codegraph/` is missing and the `codegraph` CLI is
-   available, run `codegraph init` — it only builds the index, it doesn't
-   touch project files, so it's safe to run unprompted. If `.codegraph/`
-   already exists, leave it alone; don't re-init. If the CLI isn't
-   available, note it as a skipped optional capability.
+2. **CodeGraph.** If the `codegraph` CLI is available: run `codegraph init`
+   when `.codegraph/` is missing, or `codegraph sync` when it already exists
+   (keeps the index current without a full rebuild). Both only touch the
+   index, never project files, so they're safe to run unprompted. If the
+   CLI isn't available, note it as a skipped optional capability.
 3. **Caveman.** If the `caveman:caveman-init` skill is available and this
    repo hasn't had the activation rule dropped in yet, run it. If no Caveman
    tooling is available at all, note it as skipped.
