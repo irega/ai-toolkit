@@ -17,11 +17,16 @@ mechanical, no judgment call.
    spec/plan artifacts (ADRs, `SPEC.md`, `PRD.md`, issue templates). Record
    what you found — don't initialize a convention that isn't already in use;
    adopting one is a `delivery-discovery` decision, not this phase's.
-2. **CodeGraph.** If the `codegraph` CLI is available: run `codegraph init`
-   when `.codegraph/` is missing, or `codegraph sync` when it already exists
-   (keeps the index current without a full rebuild). Both only touch the
-   index, never project files, so they're safe to run unprompted. If the
-   CLI isn't available, note it as a skipped optional capability.
+2. **CodeGraph.** Run `codegraph --version` first. If it succeeds: run
+   `codegraph init` when `.codegraph/` is missing, or `codegraph sync` when
+   it already exists (keeps the index current without a full rebuild) —
+   run it now, in this step, before writing the phase report. Both only
+   touch the index, never project files, so they're safe to run
+   unprompted. Detecting the CLI and then only *noting* `.codegraph/` is
+   missing, without running `init`, is not a valid outcome of this step —
+   the only reason to skip `init`/`sync` is `codegraph --version` itself
+   failing (CLI not installed). If the CLI isn't available, note it as a
+   skipped optional capability.
 3. **RTK.** Confirm `rtk --version` works. If it's not installed, note it as
    skipped — commands just run unfiltered, nothing breaks.
 4. **Engram.** Call `mem_current_project` then `mem_context` to recover
@@ -42,3 +47,6 @@ saying why.
 End phase 1 with a short report: conventions detected, tools enabled or
 skipped (with reason), and confirmation that prior memory was recovered.
 `delivery-discovery` reads this report, not your intermediate tool calls.
+For CodeGraph specifically, the report states which command actually ran
+(`init` or `sync`) and its result — never just "CodeGraph available" or
+"`.codegraph/` missing" with no command run.
