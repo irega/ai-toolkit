@@ -32,9 +32,7 @@ retry, in the Engram checkpoint for that phase (fallback evidence).
    risks, tests, tasks with dependencies.
 3. `delivery-implement` — strict TDD per independent deliverable, parallelize
    only independent tasks, apply Ponytail/YAGNI. Record E2E-evidence
-   requirements in task DoD. Do not run Playwright MCP as a default extra
-   check in this phase — only when a task's DoD already names it as the sole
-   available validation for that task (no other way to verify the flow).
+   requirements in task DoD. Do not run Playwright MCP in this phase.
 4. `delivery-verify` — run repo checks and acceptance/spec conformance;
    fresh-context reviews (correctness, simplicity, design, conventions,
    security when relevant); select E2E evidence by hierarchy (existing repo
