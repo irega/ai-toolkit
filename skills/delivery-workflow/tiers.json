@@ -3,25 +3,80 @@
     "high_reasoning": {
       "purpose": "Orchestrator decisions, discovery/planning, spec reconciliation.",
       "candidates": {
-        "claude": [{ "model": "claude-opus-5" }],
-        "codex": [{ "model": "gpt-5.6-sol" }],
-        "opencode": [{ "provider": "deepseek", "model": "deepseek-pro" }]
+        "claude": [
+          {
+            "model": "claude-opus-5"
+          }
+        ],
+        "codex": [
+          {
+            "model": "gpt-5.6-sol"
+          }
+        ],
+        "opencode": [
+          {
+            "provider": "opencode-go",
+            "model": "glm-5.3"
+          },
+          {
+            "provider": "opencode-go",
+            "model": "kimi-k3"
+          }
+        ]
       }
     },
     "standard": {
       "purpose": "Implementation.",
       "candidates": {
-        "claude": [{ "model": "claude-sonnet-5" }],
-        "codex": [{ "model": "gpt-5.6-terra" }],
-        "opencode": [{ "provider": "deepseek", "model": "deepseek-flash" }]
+        "claude": [
+          {
+            "model": "claude-sonnet-5"
+          }
+        ],
+        "codex": [
+          {
+            "model": "gpt-5.6-terra"
+          }
+        ],
+        "opencode": [
+          {
+            "provider": "opencode-go",
+            "model": "minimax-m3"
+          },
+          {
+            "provider": "opencode-go",
+            "model": "kimi-k2.7-code"
+          }
+        ]
       }
     },
     "economy": {
       "purpose": "Mechanical/cheap checks only (not substantive review or planning).",
       "candidates": {
-        "claude": [{ "model": "claude-haiku-4-5-20251001" }],
-        "codex": [{ "model": "gpt-5.6-luna" }],
-        "opencode": [{ "provider": "deepseek", "model": "Hy3" }]
+        "claude": [
+          {
+            "model": "claude-haiku-4-5-20251001"
+          }
+        ],
+        "codex": [
+          {
+            "model": "gpt-5.6-luna"
+          }
+        ],
+        "opencode": [
+          {
+            "provider": "opencode-go",
+            "model": "deepseek-v4-flash"
+          },
+          {
+            "provider": "opencode-go",
+            "model": "qwen3.8-flash"
+          },
+          {
+            "provider": "opencode-go",
+            "model": "glm-5.3-flash"
+          }
+        ]
       }
     }
   }
