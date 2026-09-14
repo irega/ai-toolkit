@@ -35,14 +35,30 @@ Once a PR's diff is ready, open it as a **draft PR** — never ready-for-review
 
 Regardless of the conversation's language.
 
-## Rule 3: `show-me` only when a visual materially helps
+## Rule 3: follow the repo's own PR template if it has one
 
-Most PRs need none. Use it only when a diagram or screenshot would clear up
-something prose can't (e.g. a UI change, a flow with branching states).
+Check for `.github/PULL_REQUEST_TEMPLATE.md`, `.github/PULL_REQUEST_TEMPLATE/*.md`,
+`docs/PULL_REQUEST_TEMPLATE.md`, or `PULL_REQUEST_TEMPLATE.md` at the repo
+root. If one exists, fill in its sections — don't replace it with a
+freeform body. `gh pr create --body` bypasses the template, so read it and
+reproduce its structure yourself. No template found → write a normal
+Summary/Test plan body.
 
-## Rule 4: `gh` must be usable, or say so explicitly
+## Rule 4: use `show-me` for structure and flow, not just visuals
 
-Before opening the PR, confirm `gh auth status` succeeds. If `gh` isn't
-installed or isn't authenticated, don't silently skip opening the PR — stop
-and report exactly what's missing (matching `prepare-project`'s pattern for
-optional capabilities), so a human can fix it and this phase can be retried.
+`show-me` isn't only diagrams — pseudocode, call trees, file trees, and
+diffs are all in scope, and these read faster in a PR body than the
+equivalent paragraph. Use it whenever a call tree, file tree, small
+diagram, or before/after diff would make the change's structure or flow
+clearer than prose — which is most PRs that touch more than one file, not
+just UI/branching-state changes.
+
+## Rule 5: `gh` must be usable, or degrade explicitly
+
+Before opening the PR, confirm `gh auth status` succeeds and the repo's
+remote is on GitHub. If `gh` isn't installed/authenticated, or the remote
+is a non-GitHub host (Azure DevOps, GitLab, Bitbucket, ...) with no CLI
+this runtime can drive: don't silently skip opening the PR. Instead, write
+the title and body (per Rules 1-4) to a `.md` file and tell the human where
+it is, so they can paste it into whatever host they use. Never invent a
+host-specific CLI call this runtime doesn't actually have.
