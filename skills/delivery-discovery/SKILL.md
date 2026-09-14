@@ -39,11 +39,13 @@ as Spike, Bounded, or Architectural, and only its Architectural path writes
 a spec file by default — Spike and Bounded end in a chat-only
 recommendation/design with no persisted file. **Override that default for
 this workflow**: whichever path brainstorming takes, after the human
-approves the design in chat, persist the Step 3 parts to a file (e.g.
-`docs/superpowers/specs/YYYY-MM-DD-<topic>.md`) before handing off to
-`delivery-implement` — it reads an artifact, not a chat transcript. Use
-`superpowers:writing-plans` for the task/dependency breakdown regardless of
-which brainstorming path was taken.
+approves the design in chat, persist the Step 3 parts to a file before
+handing off to `delivery-implement` — it reads an artifact, not a chat
+transcript. Since the project has no spec/plan convention of its own, this
+file is a handoff artifact between phases/agents only: write it outside
+the repo (e.g. a temp file, same pattern as the `handoff` skill), never
+`git add`/commit it. Use `superpowers:writing-plans` for the task/dependency
+breakdown regardless of which brainstorming path was taken.
 
 ## Step 3: the artifact is REQUIRED to cover these five parts
 

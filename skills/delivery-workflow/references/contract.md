@@ -7,15 +7,16 @@ individual skills link here instead of restating it.
 ## Capability tiers
 
 Never hard-code a provider or model name inside a skill. Read tier candidates
-from `tiers.json` (same directory) and pick the first candidate compatible
-with the current runtime.
+from `tiers.json` (same directory) and, on each phase invocation, pick one
+candidate compatible with the current runtime uniformly at random from that
+tier's list (a tier/runtime with a single candidate always picks that one).
 
-If a candidate errors at call time (rate limit, no credit, unavailable),
-retry with the next candidate in the same tier's list for that runtime,
-excluding the model already used for this phase/task. If no alternate
-candidate exists for that runtime, surface the failure explicitly — do not
-silently drop to a different tier. Record which candidate was used, and any
-retry, in the Engram checkpoint for that phase (fallback evidence).
+If the chosen candidate errors at call time (rate limit, no credit,
+unavailable), retry with another candidate in the same tier's list for that
+runtime, excluding the model that just failed. If no alternate candidate
+exists for that runtime, surface the failure explicitly — do not silently
+drop to a different tier. Record which candidate was used, and any retry, in
+the Engram checkpoint for that phase (fallback evidence).
 
 | Tier | Used by |
 |------|---------|
