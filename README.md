@@ -40,6 +40,12 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | Skill | Purpose |
 |-------|---------|
 | [handoff](skills/handoff/SKILL.md) | Compact the current conversation into a handoff doc for another agent |
+| [delivery-workflow](skills/delivery-workflow/SKILL.md) | Entrypoint: orchestrates the phases below for a request, end to end |
+| [prepare-project](skills/prepare-project/SKILL.md) | Phase 1: detect spec conventions, enable CodeGraph/RTK/Caveman, recover Engram state |
+| [delivery-discovery](skills/delivery-discovery/SKILL.md) | Phase 2: produce a spec/plan with acceptance criteria, risks, tests, tasks |
+| [delivery-implement](skills/delivery-implement/SKILL.md) | Phase 3: TDD per task, parallelizing only independent ones |
+| [delivery-verify](skills/delivery-verify/SKILL.md) | Phase 4: conformance checks, fresh-context reviews, E2E evidence, spec reconciliation |
+| [delivery-pr](skills/delivery-pr/SKILL.md) | Phase 5: size and open the draft PR(s) |
 | [Humanizer](https://github.com/blader/humanizer) | Rewrite AI-sounding prose to read naturally, installed cross-agent via `npx skills add` |
 | [Ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, lazy-first code solutions, installed cross-agent via `npx skills add` |
 | [Superpowers](https://github.com/obra/superpowers) | Process skills (brainstorming, TDD, systematic debugging, plan writing, code review...), installed cross-agent via `npx skills add` |
