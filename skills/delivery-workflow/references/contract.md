@@ -6,12 +6,9 @@ individual skills link here instead of restating it.
 
 ## Capability tiers
 
-Never hard-code a provider, model name, or reasoning effort inside a skill.
-Read tier candidates from `tiers.json` (same directory) and pick
-the first candidate compatible with the current runtime. Each tier also
-carries a default `effort` (`high`/`medium`/`low`) to pass to the runtime
-when it supports a reasoning-effort parameter; runtimes that don't support it
-ignore the field.
+Never hard-code a provider or model name inside a skill. Read tier candidates
+from `tiers.json` (same directory) and pick the first candidate compatible
+with the current runtime.
 
 If a candidate errors at call time (rate limit, no credit, unavailable),
 retry with the next candidate in the same tier's list for that runtime,
