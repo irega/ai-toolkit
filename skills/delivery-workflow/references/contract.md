@@ -34,10 +34,11 @@ retry, in the Engram checkpoint for that phase (fallback evidence).
    only independent tasks, apply Ponytail/YAGNI.
 4. `delivery-verify` — run repo checks and acceptance/spec conformance;
    fresh-context reviews (correctness, simplicity, design, conventions,
-   security when relevant); select E2E evidence by hierarchy (existing repo
-   E2E → unit/integration/contract evidence → Playwright MCP only for an
-   uncovered user-flow criterion still unaddressed after implementation);
-   critical failures return to `delivery-implement`.
+   security when relevant); for user-flow criteria, use an existing repo
+   E2E test if one covers it, otherwise run Playwright MCP for that
+   criterion regardless of unit/integration coverage (unit/integration
+   don't substitute for E2E on a user-flow criterion); critical failures
+   return to `delivery-implement`.
 5. Spec reconciliation (inside verify) — compare source spec/plan, diff,
    tests, and E2E evidence; for an accepted behavior/design change, update
    the source spec artifact on the same branch and persist the decision in

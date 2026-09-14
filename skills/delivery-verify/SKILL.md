@@ -26,22 +26,28 @@ change touches trust boundaries. Parallelize the dispatch when the runtime
 supports it (e.g. Claude Code's Agent tool); run them one after another
 with fresh context otherwise.
 
-## Step 3: E2E evidence, in this order — stop at the first that covers the criterion
+## Step 3: E2E evidence for user-flow acceptance criteria
 
-1. Existing repo E2E tests already covering the acceptance criterion.
-2. Unit/integration/contract test evidence that demonstrates the same
-   behavior, even without a full E2E test.
-3. Playwright MCP — **only** for a user-flow acceptance criterion still
-   uncovered after 1 and 2, and only for that criterion.
+For each acceptance criterion that describes a user-facing flow:
 
-**Never run Playwright MCP as a default extra check.** "More evidence is
-always better" is not a reason — it burns browser-session tokens for
-coverage the existing tests already prove.
+1. **Existing repo E2E test already covers it** → use that, done — don't
+   also run Playwright MCP for a criterion that's already covered.
+2. **No E2E covers it** → run Playwright MCP for that specific criterion,
+   even if unit/integration/contract tests already pass. Unit and
+   integration tests prove the pieces work in isolation; they don't prove
+   the real user-facing flow does, and that gap is exactly what E2E
+   evidence exists to close.
 
-| Excuse | Reality |
-|---|---|
-| "It's a user-facing change, let's be thorough" | Thorough means checking whether 1 or 2 already cover it, not reaching for the heaviest tool by default. |
-| "Playwright would double-confirm it" | Double-confirming a criterion 1/2 already covers is wasted tokens, not rigor. |
+Unit/integration/contract evidence is still useful and worth keeping, but
+it isn't a substitute tier that lets you skip Playwright when no E2E exists
+— it's what you had already, not what closes this gap.
+
+**Never run Playwright MCP for a criterion an existing E2E test already
+covers** — that's the actual waste (re-proving something already proven),
+not running it when there's a real gap.
+
+Non-user-flow acceptance criteria (internals, data shape, CLI output, pure
+functions) never need Playwright MCP regardless of E2E coverage.
 
 ## Step 4: the gate — critical failures go back, not forward
 
