@@ -48,6 +48,13 @@ retry, in the Engram checkpoint for that phase (fallback evidence).
 6. `delivery-pr` — enforce small PRs, English title/body/docs, `show-me`
    only when a visual materially helps, open a **draft PR** once gates pass.
 
+## Commits
+
+Every commit made during this workflow (any phase) uses Conventional
+Commits format (`feat:`, `fix:`, `docs:`, `chore:`, ...) and carries no
+AI/model attribution — no `Co-Authored-By` or similar trailer naming the
+agent or model. Commits read as the human operator's own work.
+
 ## Engram checkpoints
 
 Save a recovery checkpoint — not every action — at: startup/context
