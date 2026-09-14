@@ -19,7 +19,7 @@ retry, in the Engram checkpoint for that phase (fallback evidence).
 
 | Tier | Used by |
 |------|---------|
-| `high_reasoning` | Orchestrator (scope, routing, gate decisions, spec reconciliation) and discovery/planning |
+| `high_reasoning` | Orchestrator (scope, routing, spec reconciliation), discovery/planning, and fresh-context reviews |
 | `standard` | Implementation |
 | `economy` | Mechanical/cheap checks only — never substantive planning or review |
 

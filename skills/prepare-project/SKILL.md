@@ -7,6 +7,8 @@ description: Use when starting phase 1 of the delivery workflow (before delivery
 
 Phase 1 of the delivery workflow (see `../delivery-workflow/references/contract.md`
 for the full phase list and tier contract — this skill doesn't restate it).
+Run this phase at the `economy` tier — detection and setup here are
+mechanical, no judgment call.
 
 ## What to do, in order
 

@@ -6,16 +6,16 @@ description: Use when starting phase 4 of the delivery workflow (after delivery-
 # delivery-verify
 
 Phase 4 of the delivery workflow (see `../delivery-workflow/references/contract.md`
-for the full phase list and tier contract). Reviews run at the `standard`
-tier.
+for the full phase list and tier contract).
 
-## Step 1: conformance
+## Step 1: conformance — `economy` tier
 
 Run the repo's existing checks (lint, build, test suite) and compare the
 diff against the discovery artifact's acceptance criteria one by one. This
-phase does not implement fixes — see Step 4.
+is a mechanical pass/fail check, not judgment — run it at the `economy`
+tier. This phase does not implement fixes — see Step 4.
 
-## Step 2: fresh-context reviews
+## Step 2: fresh-context reviews — `high_reasoning` tier
 
 Dispatch each of these as its own fresh-context pass (a subagent, or a
 genuinely separate context if the runtime has no subagent support — never
@@ -26,7 +26,7 @@ change touches trust boundaries. Parallelize the dispatch when the runtime
 supports it (e.g. Claude Code's Agent tool); run them one after another
 with fresh context otherwise.
 
-## Step 3: E2E evidence for user-flow acceptance criteria
+## Step 3: E2E evidence for user-flow acceptance criteria — `standard` tier
 
 For each acceptance criterion that describes a user-facing flow:
 
@@ -49,7 +49,11 @@ not running it when there's a real gap.
 Non-user-flow acceptance criteria (internals, data shape, CLI output, pure
 functions) never need Playwright MCP regardless of E2E coverage.
 
-## Step 4: the gate — critical failures go back, not forward
+## Step 4: the gate — critical failures go back, not forward — `standard` tier
+
+The severity judgment already happened in Steps 2-3 (each review states
+whether its findings are critical); this step applies the resulting
+verdicts, it doesn't re-judge them.
 
 A critical failure is: an unmet acceptance criterion, a failing repo check,
 or a review finding severe enough that shipping it would be a regression.
@@ -67,7 +71,7 @@ boundary that exists so implementation changes always go through
 - "We're almost done, ship it and fix in a follow-up" doesn't clear a
   critical failure — a follow-up is fine for non-critical findings only.
 
-## Step 5: spec reconciliation
+## Step 5: spec reconciliation — `high_reasoning` tier
 
 Compare the source spec/plan, the final diff, the tests, and the E2E
 evidence.
