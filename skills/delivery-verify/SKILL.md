@@ -15,7 +15,7 @@ diff against the discovery artifact's acceptance criteria one by one. This
 is a mechanical pass/fail check, not judgment — run it at the `economy`
 tier. This phase does not implement fixes — see Step 4.
 
-## Step 2: fresh-context reviews — `standard` tier
+## Step 2: fresh-context reviews — `high_reasoning` tier
 
 Dispatch each of these as its own fresh-context pass (a subagent, or a
 genuinely separate context if the runtime has no subagent support — never
@@ -49,10 +49,11 @@ not running it when there's a real gap.
 Non-user-flow acceptance criteria (internals, data shape, CLI output, pure
 functions) never need Playwright MCP regardless of E2E coverage.
 
-## Step 4: the gate — critical failures go back, not forward — `high_reasoning` tier
+## Step 4: the gate — critical failures go back, not forward — `standard` tier
 
-Per the shared contract, gate decisions run at `high_reasoning` — a wrong
-call here either ships a regression or wastes a full loop back.
+The severity judgment already happened in Steps 2-3 (each review states
+whether its findings are critical); this step applies the resulting
+verdicts, it doesn't re-judge them.
 
 A critical failure is: an unmet acceptance criterion, a failing repo check,
 or a review finding severe enough that shipping it would be a regression.
