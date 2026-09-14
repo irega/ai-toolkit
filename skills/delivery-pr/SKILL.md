@@ -7,6 +7,9 @@ description: Use when starting the final phase of the delivery workflow, right a
 
 Final phase of the delivery workflow (see `../delivery-workflow/references/contract.md`
 for the full phase list). Only runs after `delivery-verify`'s gates passed.
+Run this phase at the `standard` tier — splitting into independent PRs and
+writing the title/body still takes judgment, even though the heavy
+decisions already happened upstream.
 
 ## Rule 1: one PR per independent concern, always draft
 
