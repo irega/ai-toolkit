@@ -26,7 +26,7 @@ change touches trust boundaries. Parallelize the dispatch when the runtime
 supports it (e.g. Claude Code's Agent tool); run them one after another
 with fresh context otherwise.
 
-## Step 3: E2E evidence for user-flow acceptance criteria
+## Step 3: E2E evidence for user-flow acceptance criteria — `standard` tier
 
 For each acceptance criterion that describes a user-facing flow:
 
@@ -49,7 +49,10 @@ not running it when there's a real gap.
 Non-user-flow acceptance criteria (internals, data shape, CLI output, pure
 functions) never need Playwright MCP regardless of E2E coverage.
 
-## Step 4: the gate — critical failures go back, not forward
+## Step 4: the gate — critical failures go back, not forward — `high_reasoning` tier
+
+Per the shared contract, gate decisions run at `high_reasoning` — a wrong
+call here either ships a regression or wastes a full loop back.
 
 A critical failure is: an unmet acceptance criterion, a failing repo check,
 or a review finding severe enough that shipping it would be a regression.
@@ -67,7 +70,7 @@ boundary that exists so implementation changes always go through
 - "We're almost done, ship it and fix in a follow-up" doesn't clear a
   critical failure — a follow-up is fine for non-critical findings only.
 
-## Step 5: spec reconciliation
+## Step 5: spec reconciliation — `high_reasoning` tier
 
 Compare the source spec/plan, the final diff, the tests, and the E2E
 evidence.
