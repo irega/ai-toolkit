@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "tiers": {
     "high_reasoning": {
       "purpose": "Orchestrator decisions, discovery/planning, spec reconciliation.",
