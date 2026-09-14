@@ -8,15 +8,20 @@ individual skills link here instead of restating it.
 
 Never hard-code a provider or model name inside a skill. Read tier candidates
 from `tiers.json` (same directory, versioned) and pick the first candidate
-compatible with the current runtime. If none are available, fall back through
-the remaining candidates in order and record which one was used and why in
-the Engram checkpoint for that phase (fallback evidence).
+compatible with the current runtime.
+
+If a candidate errors at call time (rate limit, no credit, unavailable),
+retry with the next candidate in the same tier's list for that runtime,
+excluding the model already used for this phase/task. If no alternate
+candidate exists for that runtime, surface the failure explicitly — do not
+silently drop to a different tier. Record which candidate was used, and any
+retry, in the Engram checkpoint for that phase (fallback evidence).
 
 | Tier | Used by |
 |------|---------|
-| `high_reasoning` | Orchestrator: scope, routing, gate decisions, spec reconciliation |
-| `standard` | Discovery and implementation work |
-| `economy` | Reviewers, mechanical checks, single-dimension review passes |
+| `high_reasoning` | Orchestrator (scope, routing, gate decisions, spec reconciliation) and discovery/planning |
+| `standard` | Implementation and fresh-context reviews |
+| `economy` | Mechanical/cheap checks only — never substantive planning or review |
 
 ## Phases
 
@@ -27,13 +32,15 @@ the Engram checkpoint for that phase (fallback evidence).
    risks, tests, tasks with dependencies.
 3. `delivery-implement` — strict TDD per independent deliverable, parallelize
    only independent tasks, apply Ponytail/YAGNI. Record E2E-evidence
-   requirements in task DoD; never run Playwright MCP in this phase.
+   requirements in task DoD. Do not run Playwright MCP as a default extra
+   check in this phase — only when a task's DoD already names it as the sole
+   available validation for that task (no other way to verify the flow).
 4. `delivery-verify` — run repo checks and acceptance/spec conformance;
    fresh-context reviews (correctness, simplicity, design, conventions,
    security when relevant); select E2E evidence by hierarchy (existing repo
    E2E → unit/integration/contract evidence → Playwright MCP only for an
-   uncovered user-flow criterion); critical failures return to
-   `delivery-implement`.
+   uncovered user-flow criterion still unaddressed after implementation);
+   critical failures return to `delivery-implement`.
 5. Spec reconciliation (inside verify) — compare source spec/plan, diff,
    tests, and E2E evidence; for an accepted behavior/design change, update
    the source spec artifact on the same branch and persist the decision in

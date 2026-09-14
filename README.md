@@ -67,5 +67,4 @@ get injected into the server registration.
 | `scripts/link-skills.sh` | (Re-)symlink `skills/` into `~/.claude/skills`, `~/.codex/skills`, `~/.config/opencode/skills` |
 | `scripts/unlink-skills.sh` | Remove broken skill symlinks from all three skill directories |
 | `scripts/mcp/sync-mcp.sh` | Dispatcher: registers MCP servers from `configs/mcp-servers.json` into whichever of claude/codex/opencode are installed |
-| `scripts/validate-skills.sh` | Validate skill frontmatter, cross-links, and the tier mapping in `skills/delivery-workflow/tiers.json` |
 | `scripts/mcp/sync-mcp-<assistant>.sh` | Register MCP servers with one specific assistant (`claude`, `codex`, or `opencode`) only |
