@@ -24,6 +24,19 @@ operator, not something any skill can pick or verify.
 | `delivery-verify` | Dispatched per step, per its own Steps 2-3 | Yes, bounded (see below) |
 | `delivery-pr` | Dispatched as a subagent by the orchestrator | Yes |
 
+**Never inline, not even after a blocker.** For the four dispatchable
+phases, the orchestrator dispatches a subagent and stays out of that
+phase's actual work — diagnosing a failure, drafting the PR body, running
+the push, resolving an auth/tooling blocker. Hitting a blocker mid-phase
+(e.g. `gh`/host-CLI auth failure) is not authorization to take the rest of
+the phase over inline: retry the dispatch with the blocker's context added,
+or re-dispatch a fresh subagent past the blocker, or escalate to the
+operator per that phase's own degrade rule (`delivery-pr`'s Rule 5, for
+example). Silently continuing step-by-step in the orchestrator's own
+context after one blocked dispatch attempt is the same fail-open failure
+this section exists to prevent, whether the excuse is a missing config
+file or "I already had the context loaded, easier to finish it myself."
+
 For the four dispatchable phases, the orchestrator (or the phase itself, for
 implement/verify's internal fan-out) picks one candidate compatible with the
 current runtime uniformly at random from that tier's list (a tier/runtime

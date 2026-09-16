@@ -24,6 +24,13 @@ directly, a subagent can't relay that without adding a round-trip. See
 rule and the per-runtime dispatch mechanism (pinned OpenCode agents,
 explicit model param elsewhere) before dispatching either.
 
+A blocker inside `prepare-project` or `delivery-pr` (tool auth failure,
+missing CLI, etc.) is never a reason to keep going yourself, step by step,
+in this orchestrating context — retry the dispatch with the blocker's
+context added, re-dispatch fresh past it, or escalate to the operator per
+that phase's own degrade rule. See contract.md's "Never inline, not even
+after a blocker."
+
 ## Run every phase, every time — size changes effort, never which phases run
 
 `prepare-project` → `delivery-discovery` → `delivery-implement` →
