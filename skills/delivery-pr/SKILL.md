@@ -7,10 +7,13 @@ description: Use when starting the final phase of the delivery workflow, right a
 
 Final phase of the delivery workflow (see `../delivery-workflow/references/contract.md`
 for the full phase list). Only runs after `delivery-verify`'s gates passed.
-Run this phase at the `economy` tier — the heavy decisions (what's
-independent, whether it's ready) already happened in `delivery-discovery`
-and `delivery-verify`; this phase packages that into PRs, it doesn't
-re-judge it.
+The orchestrator dispatches this phase as a subagent at the `economy`
+tier — the heavy decisions (what's independent, whether it's ready) already
+happened in `delivery-discovery` and `delivery-verify`; this phase packages
+that into PRs, it doesn't re-judge it. Opening the PR as a draft (Rule 1) is
+the safety gate — it's the authorization the human already gave by invoking
+`delivery-workflow`, so this phase doesn't need to check back in before
+pushing and opening it.
 
 ## Rule 1: one PR per independent concern, always draft
 

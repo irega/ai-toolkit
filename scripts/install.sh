@@ -53,6 +53,18 @@ bash "$REPO_SCRIPTS/mcp/sync-mcp.sh"
 
 echo ""
 
+# 4b. OpenCode pinned agents: delivery-workflow's tiers.json becomes one
+# pinned subagent per tier (OpenCode's task tool can't override model
+# per-call, so pinning it in the agent's frontmatter is the only channel).
+if command -v opencode &>/dev/null; then
+  echo "Generating OpenCode pinned agents from tiers.json..."
+  bash "$REPO_SCRIPTS/opencode/sync-opencode-agents.sh"
+else
+  echo "Skipping OpenCode pinned agents ('opencode' CLI not found)"
+fi
+
+echo ""
+
 # 5. OpenSpec
 if command -v npm &>/dev/null; then
   echo "Installing OpenSpec..."
