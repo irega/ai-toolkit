@@ -74,3 +74,4 @@ get injected into the server registration.
 | `scripts/unlink-skills.sh` | Remove broken skill symlinks from all three skill directories |
 | `scripts/mcp/sync-mcp.sh` | Dispatcher: registers MCP servers from `configs/mcp-servers.json` into whichever of claude/codex/opencode are installed |
 | `scripts/mcp/sync-mcp-<assistant>.sh` | Register MCP servers with one specific assistant (`claude`, `codex`, or `opencode`) only |
+| `scripts/opencode/sync-opencode-agents.sh` | Generate one pinned subagent per tier in `skills/delivery-workflow/tiers.json` under `~/.config/opencode/agents/` — works around OpenCode's task tool having no per-call model override |

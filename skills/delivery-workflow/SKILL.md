@@ -15,6 +15,15 @@ restate any phase's internal rules — `prepare-project`, `delivery-discovery`,
 carry their own tested rules; invoke them and enforce what happens between
 them.
 
+**Dispatch `prepare-project` and `delivery-pr` as subagents**, at the tier
+each declares in its own `SKILL.md` (`economy` for both) — they're
+mechanical (detection, packaging) with no need for this session's own
+model. Run `delivery-discovery` inline — it needs to talk to the human
+directly, a subagent can't relay that without adding a round-trip. See
+`references/contract.md`'s Capability tiers section for the fail-closed
+rule and the per-runtime dispatch mechanism (pinned OpenCode agents,
+explicit model param elsewhere) before dispatching either.
+
 ## Run every phase, every time — size changes effort, never which phases run
 
 `prepare-project` → `delivery-discovery` → `delivery-implement` →
