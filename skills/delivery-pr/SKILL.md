@@ -66,6 +66,12 @@ Before opening the PR, confirm `gh auth status` succeeds and the repo's
 remote is on GitHub. If `gh` isn't installed/authenticated, or the remote
 is a non-GitHub host (Azure DevOps, GitLab, Bitbucket, ...) with no CLI
 this runtime can drive: don't silently skip opening the PR. Instead, write
-the title and body (per Rules 1-4) to a `.md` file and tell the human where
-it is, so they can paste it into whatever host they use. Never invent a
-host-specific CLI call this runtime doesn't actually have.
+a `.md` file with the title on its own first line (`# <title>`), a blank
+line, then the body — and tell the human where it is, so they can paste it
+into whatever host they use. The title goes in the file itself, not just in
+your chat reply — a title mentioned only in conversation and never
+persisted is the same silent drop as skipping it outright. Match the
+title's format to whatever this repo's commits/merged PRs already use (this
+workflow's own commits follow Conventional Commits, per contract.md's
+Commits section — mirror that unless the repo's history shows otherwise).
+Never invent a host-specific CLI call this runtime doesn't actually have.
