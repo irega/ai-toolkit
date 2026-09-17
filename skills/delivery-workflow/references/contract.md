@@ -88,8 +88,8 @@ a model outside the tier's candidate list for that phase.
 
 | Tier | Used by |
 |------|---------|
-| `high_reasoning` | Orchestrator (scope, routing, spec reconciliation), discovery/planning, and fresh-context reviews |
-| `standard` | Implementation |
+| `high_reasoning` | Orchestrator (scope, routing, spec reconciliation), discovery/planning |
+| `standard` | Implementation, fresh-context reviews |
 | `economy` | Mechanical/cheap checks only — never substantive planning or review |
 
 ## Phases
