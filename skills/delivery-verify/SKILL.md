@@ -15,7 +15,7 @@ diff against the discovery artifact's acceptance criteria one by one. This
 is a mechanical pass/fail check, not judgment — run it at the `economy`
 tier. This phase does not implement fixes — see Step 4.
 
-## Step 2: fresh-context reviews — `high_reasoning` tier
+## Step 2: fresh-context reviews — `standard` tier
 
 Dispatch each of these as its own fresh-context pass (a subagent, or a
 genuinely separate context if the runtime has no subagent support — never
@@ -24,7 +24,13 @@ conclusions): correctness/regression, simplicity/YAGNI, design/
 maintainability, repository conventions, and security/reliability when the
 change touches trust boundaries. Parallelize the dispatch when the runtime
 supports it (e.g. Claude Code's Agent tool); run them one after another
-with fresh context otherwise.
+with fresh context otherwise. Use `low` reasoning effort for each pass
+except correctness/regression, which stays at `medium` — these are diff
+reviews against known acceptance criteria, not open-ended planning, so
+`high_reasoning`'s heavier model is reserved for Step 5's spec
+reconciliation instead. If a review's findings are ambiguous or contested,
+re-dispatch that single pass at `high_reasoning` rather than raising the
+tier for all four upfront.
 
 ## Step 3: E2E evidence for user-flow acceptance criteria — `standard` tier
 
