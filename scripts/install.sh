@@ -53,15 +53,12 @@ bash "$REPO_SCRIPTS/mcp/sync-mcp.sh"
 
 echo ""
 
-# 4b. OpenCode pinned agents: delivery-workflow's tiers.json becomes one
-# pinned subagent per tier (OpenCode's task tool can't override model
-# per-call, so pinning it in the agent's frontmatter is the only channel).
-if command -v opencode &>/dev/null; then
-  echo "Generating OpenCode pinned agents from tiers.json..."
-  bash "$REPO_SCRIPTS/opencode/sync-opencode-agents.sh"
-else
-  echo "Skipping OpenCode pinned agents ('opencode' CLI not found)"
-fi
+# 4b. Pinned agents: delivery-workflow's tiers.json becomes one pinned
+# subagent per (tier, effort) pair, for every installed CLI. None of them
+# accept a model or effort argument on an ad-hoc dispatch, so a predefined
+# agent is the only channel that pins either.
+echo "Generating pinned agents from tiers.json..."
+bash "$REPO_SCRIPTS/agents/sync-agents.sh"
 
 echo ""
 

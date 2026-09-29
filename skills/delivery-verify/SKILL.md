@@ -8,31 +8,48 @@ description: Use when starting phase 4 of the delivery workflow (after delivery-
 Phase 4 of the delivery workflow (see `../delivery-workflow/references/contract.md`
 for the full phase list and tier contract).
 
-## Step 1: conformance — `economy` tier
+## Step 1: conformance — `delivery-economy-low`
 
 Run the repo's existing checks (lint, build, test suite) and compare the
 diff against the discovery artifact's acceptance criteria one by one. This
-is a mechanical pass/fail check, not judgment — run it at the `economy`
-tier. This phase does not implement fixes — see Step 4.
+is a mechanical pass/fail check, not judgment — dispatch it to the
+`delivery-economy-low` pinned agent. This phase does not implement fixes —
+see Step 4.
 
 ## Step 2: fresh-context reviews — `standard` tier
 
 Dispatch each of these as its own fresh-context pass (a subagent, or a
 genuinely separate context if the runtime has no subagent support — never
 the same context that just ran Step 1, it's already anchored on its own
-conclusions): correctness/regression, simplicity/YAGNI, design/
-maintainability, repository conventions, and security/reliability when the
-change touches trust boundaries. Parallelize the dispatch when the runtime
-supports it (e.g. Claude Code's Agent tool); run them one after another
-with fresh context otherwise. Use `low` reasoning effort for each pass
-except correctness/regression, which stays at `medium` — these are diff
-reviews against known acceptance criteria, not open-ended planning, so
-`high_reasoning`'s heavier model is reserved for Step 5's spec
-reconciliation instead. If a review's findings are ambiguous or contested,
-re-dispatch that single pass at `high_reasoning` rather than raising the
-tier for all four upfront.
+conclusions). Parallelize the dispatch when the runtime supports it (e.g.
+Claude Code's Agent tool); run them one after another with fresh context
+otherwise.
 
-## Step 3: E2E evidence for user-flow acceptance criteria — `standard` tier
+| Review | Pinned agent |
+|--------|--------------|
+| Correctness / regression | `delivery-standard-medium` |
+| Security / reliability, when the change touches trust boundaries | `delivery-standard-medium` |
+| Simplicity / YAGNI | `delivery-standard-low` |
+| Design / maintainability | `delivery-standard-low` |
+| Repository conventions | `delivery-standard-low` |
+
+Correctness and security both have to trace data and reachability to say
+anything useful, so they get the higher effort; the other three compare the
+diff against rules that are already written down, and `high_reasoning` is
+reserved for Step 5's spec reconciliation.
+
+**Dispatch to the pinned agent by name — never a generic subagent with the
+effort written in the prompt.** No runtime accepts effort as a dispatch
+argument, so a generic subagent silently inherits the session's effort and
+every review runs at whatever the orchestrator happened to be set to. See
+the contract's "Pinned agents" section; run `scripts/agents/sync-agents.sh`
+if the agents don't exist yet.
+
+If a review's findings are ambiguous or contested, re-dispatch that single
+pass to `delivery-high-reasoning-high` rather than raising the tier for all
+five upfront.
+
+## Step 3: E2E evidence for user-flow acceptance criteria — `delivery-standard-medium`
 
 For each acceptance criterion that describes a user-facing flow:
 
@@ -55,7 +72,7 @@ not running it when there's a real gap.
 Non-user-flow acceptance criteria (internals, data shape, CLI output, pure
 functions) never need Playwright MCP regardless of E2E coverage.
 
-## Step 4: the gate — critical failures go back, not forward — `standard` tier
+## Step 4: the gate — critical failures go back, not forward — `delivery-standard-low`
 
 The severity judgment already happened in Steps 2-3 (each review states
 whether its findings are critical); this step applies the resulting
@@ -77,7 +94,7 @@ boundary that exists so implementation changes always go through
 - "We're almost done, ship it and fix in a follow-up" doesn't clear a
   critical failure — a follow-up is fine for non-critical findings only.
 
-## Step 5: spec reconciliation — `high_reasoning` tier
+## Step 5: spec reconciliation — `delivery-high-reasoning-high`
 
 Compare the source spec/plan, the final diff, the tests, and the E2E
 evidence.

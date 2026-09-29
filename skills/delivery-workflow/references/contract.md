@@ -54,21 +54,57 @@ the Engram checkpoint for that phase (fallback evidence).
   tier/runtime: **stop and report it to the operator** — do not guess a
   model, do not fall back to the session's default, do not proceed on the
   assumption that "probably fine" covers a reasoning tier you can't verify.
-- If the dispatch mechanism itself has no way to pin a model for the chosen
-  candidate (e.g. a `task` tool with no per-call model parameter, and no
-  pinned-agent config for that candidate either): **stop and report it** —
+- If the dispatch mechanism itself has no way to pin the model or the
+  effort for the chosen candidate (e.g. a `task` tool with no per-call
+  model parameter, and no pinned-agent config for that candidate either):
+  **stop and report it** —
   present the operator's real options (create the pinned-agent config for
   this runtime; accept the session-model fallback but log it explicitly in
   the Engram checkpoint as a tier violation, not a success; use a different
   dispatch channel) and wait for a choice. Never inherit the session model
   in silence and call it done.
 
-For OpenCode specifically: its `task` tool has no per-call model override
-today, so the only working mechanism is a pinned subagent (`model:` in the
-agent's frontmatter under `~/.config/opencode/agents/`). Run
-`scripts/opencode/sync-opencode-agents.sh` (from this repo) to generate one
-pinned agent per tier from `tiers.json`; dispatch to that agent's name
-instead of a generic subagent when running under OpenCode.
+## Pinned agents: the only channel for effort
+
+A tier fixes the model. Reasoning effort is a second, independent dial, and
+**no runtime lets a skill set it on an ad-hoc dispatch**:
+
+| Runtime | Dispatch call accepts | Effort pinnable via |
+|---------|----------------------|---------------------|
+| Claude Code | `subagent_type`, `model`, `prompt` — no effort argument | `effort:` in `~/.claude/agents/<name>.md` frontmatter |
+| Codex | agent name — reasoning effort is not an argument | `model_reasoning_effort` in `~/.codex/agents/<name>.toml` |
+| OpenCode | `task` tool has no per-call model override either | `model:` and `variant:` in `~/.config/opencode/agents/<name>.md` |
+
+A subagent that isn't pinned inherits the session's effort, so telling a
+skill to "review at low effort" does nothing unless it dispatches to an
+agent that was defined ahead of time with that effort baked in.
+
+So `tiers.json` declares, per tier, both the candidates **and** the
+`efforts` that tier is dispatched at. Run `scripts/agents/sync-agents.sh`
+(from this repo) to generate one pinned agent per (tier, effort) pair for
+whichever CLIs are installed; the per-runtime scripts next to it do one
+runtime each. Agents are named `delivery-<tier>-<effort>`, with underscores
+in the tier becoming dashes:
+
+| Agent | Tier | Effort |
+|-------|------|--------|
+| `delivery-high-reasoning-high` | `high_reasoning` | high |
+| `delivery-standard-medium` | `standard` | medium |
+| `delivery-standard-low` | `standard` | low |
+| `delivery-economy-low` | `economy` | low |
+
+Dispatch to that agent name instead of a generic subagent. Re-run the sync
+script after editing `tiers.json` — the agent files are generated output,
+never hand-edited, and they are rendered from the templates in
+`scripts/agents/templates/` (one per runtime) rather than from strings
+inside the generator.
+
+**OpenCode caveat.** Its `variant` values are defined by the model, not by
+OpenCode, so the generator emits `variant:` only for a candidate that
+declares a `variants` map in `tiers.json`. Without one it pins the model,
+prints a warning naming every agent whose effort is unpinned, and that
+tier's effort split is advisory under OpenCode — which is the fail-loud
+behaviour this file asks for everywhere else, not a silent pass.
 
 ## Interaction with subagent-driven-development
 
@@ -86,11 +122,11 @@ complexity heuristic picks **which candidate in that pool**, and decides
 when to escalate within it (e.g. fix-loop rounds 4-5). Neither system picks
 a model outside the tier's candidate list for that phase.
 
-| Tier | Used by |
-|------|---------|
-| `high_reasoning` | Orchestrator (scope, routing, spec reconciliation), discovery/planning |
-| `standard` | Implementation, fresh-context reviews |
-| `economy` | Mechanical/cheap checks only — never substantive planning or review |
+| Tier | Efforts | Used by |
+|------|---------|---------|
+| `high_reasoning` | high | Orchestrator (scope, routing, spec reconciliation), discovery/planning |
+| `standard` | low, medium | Implementation, fresh-context reviews |
+| `economy` | low | Mechanical/cheap checks only — never substantive planning or review |
 
 ## Phases
 
