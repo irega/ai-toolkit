@@ -2,6 +2,7 @@
   "tiers": {
     "high_reasoning": {
       "purpose": "Orchestrator decisions, discovery/planning, spec reconciliation.",
+      "efforts": ["high"],
       "candidates": {
         "claude": [
           {
@@ -27,6 +28,7 @@
     },
     "standard": {
       "purpose": "Implementation and fresh-context reviews.",
+      "efforts": ["low", "medium"],
       "candidates": {
         "claude": [
           {
@@ -52,6 +54,7 @@
     },
     "economy": {
       "purpose": "Mechanical/cheap checks only (not substantive review or planning).",
+      "efforts": ["low"],
       "candidates": {
         "claude": [
           {
