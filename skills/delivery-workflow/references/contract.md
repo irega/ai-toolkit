@@ -99,6 +99,16 @@ never hand-edited, and they are rendered from the templates in
 `scripts/agents/templates/` (one per runtime) rather than from strings
 inside the generator.
 
+Editing `tiers.json` (renaming a tier, dropping an effort) leaves the old
+agent file behind — it isn't wrong on its own, it just no longer matches
+anything the generator would produce, so a skill could still dispatch to
+it with no way to tell it's stale. `scripts/agents/prune-agents.sh` removes
+exactly that set — every `delivery-*` file across all three agent
+directories that current `tiers.json` would not generate — regardless of
+which CLIs are installed, since a leftover can outlive an uninstall. Run it
+after editing `tiers.json`, the same way `unlink-skills.sh` is run after
+removing a skill.
+
 **OpenCode caveat.** Its `variant` values are defined by the model, not by
 OpenCode, so the generator emits `variant:` only for a candidate that
 declares a `variants` map in `tiers.json`. Without one it pins the model,
