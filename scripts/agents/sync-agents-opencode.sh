@@ -16,11 +16,14 @@ set -euo pipefail
 # is NOT pinned — silently shipping an agent that looks effort-pinned but
 # isn't is the failure mode this warning exists to prevent.
 #
-# One candidate per tier is pinned (the first "opencode" entry in
-# tiers.json), not every candidate — rotating across candidates would need
-# one agent file per candidate and a generator kept in sync by hand for no
-# runtime benefit here. Widen this only if per-candidate rotation is
-# actually needed for OpenCode.
+# Every candidate for a tier gets its own agent file, suffixed
+# `--<model>` (delivery-standard-low--minimax-m3,
+# delivery-standard-low--kimi-k2.7-code) whenever a tier lists more than one
+# opencode candidate. A single-candidate tier keeps the plain
+# delivery-<tier>-<effort> name. This is what makes the contract's "pick one
+# candidate uniformly at random" rule possible for OpenCode: the dispatcher
+# picks which agent *file* to call, since there is no per-call model
+# override to pick a model after the fact.
 
 source "$(dirname "$0")/lib.sh"
 preflight
@@ -33,34 +36,41 @@ generated=()
 unpinned=()
 
 for tier in $(tier_names); do
-  provider="$(candidate_field "$tier" opencode provider)"
-  model="$(candidate_field "$tier" opencode model)"
-  if [ -z "$model" ]; then
+  count="$(candidate_count "$tier" opencode)"
+  if [ "$count" -eq 0 ]; then
     echo "skipping $tier (no opencode candidate in tiers.json)"
     continue
   fi
   for effort in $(tier_efforts "$tier"); do
-    name="$(agent_name "$tier" "$effort")"
-    variant=$(jq -r --arg t "$tier" --arg e "$effort" \
-      '.tiers[$t].candidates.opencode[0].variants[$e] // empty' "$TIERS")
+    for ((i = 0; i < count; i++)); do
+      provider="$(candidate_field_at "$tier" opencode "$i" provider)"
+      model="$(candidate_field_at "$tier" opencode "$i" model)"
+      if [ "$count" -gt 1 ]; then
+        name="$(agent_name "$tier" "$effort" "$model")"
+      else
+        name="$(agent_name "$tier" "$effort")"
+      fi
+      variant=$(jq -r --arg t "$tier" --arg e "$effort" --arg i "$i" \
+        '.tiers[$t].candidates.opencode[($i|tonumber)].variants[$e] // empty' "$TIERS")
 
-    if [ -n "$variant" ]; then
-      variant_line="variant: $variant"
-      note="variant=$variant"
-    else
-      variant_line="$DROP_MARKER"
-      note="effort NOT pinned"
-      unpinned+=("$name")
-    fi
+      if [ -n "$variant" ]; then
+        variant_line="variant: $variant"
+        note="variant=$variant"
+      else
+        variant_line="$DROP_MARKER"
+        note="effort NOT pinned"
+        unpinned+=("$name")
+      fi
 
-    render "$TEMPLATES/opencode.md" \
-      NAME "$name" \
-      DESCRIPTION "$(agent_description "$tier" "$effort")" \
-      MODEL "$provider/$model" \
-      VARIANT_LINE "$variant_line" \
-      TIER "$tier" > "$DEST/$name.md"
-    echo "generated $name -> $DEST/$name.md ($provider/$model, $note)"
-    generated+=("$name")
+      render "$TEMPLATES/opencode.md" \
+        NAME "$name" \
+        DESCRIPTION "$(agent_description "$tier" "$effort")" \
+        MODEL "$provider/$model" \
+        VARIANT_LINE "$variant_line" \
+        TIER "$tier" > "$DEST/$name.md"
+      echo "generated $name -> $DEST/$name.md ($provider/$model, $note)"
+      generated+=("$name")
+    done
   done
 done
 
