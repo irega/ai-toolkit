@@ -81,10 +81,10 @@ agent that was defined ahead of time with that effort baked in.
 
 So `tiers.json` declares, per tier, both the candidates **and** the
 `efforts` that tier is dispatched at. Run `scripts/agents/sync-agents.sh`
-(from this repo) to generate one pinned agent per (tier, effort) pair for
-whichever CLIs are installed; the per-runtime scripts next to it do one
-runtime each. Agents are named `delivery-<tier>-<effort>`, with underscores
-in the tier becoming dashes:
+(from this repo) to generate one pinned agent per (tier, effort, candidate)
+combination for whichever CLIs are installed; the per-runtime scripts next
+to it do one runtime each. Agents are named `delivery-<tier>-<effort>`, with
+underscores in the tier becoming dashes:
 
 | Agent | Tier | Effort |
 |-------|------|--------|
@@ -92,6 +92,28 @@ in the tier becoming dashes:
 | `delivery-standard-medium` | `standard` | medium |
 | `delivery-standard-low` | `standard` | low |
 | `delivery-economy-low` | `economy` | low |
+
+**Claude and Codex** each have exactly one candidate per tier in
+`tiers.json` today, so their agent names are never suffixed — the table
+above is literal for them.
+
+**OpenCode has no per-call model override** (its `task` tool always
+inherits the calling agent's pinned model), so a single agent file can't
+offer a choice at dispatch time the way `tiers.json`'s "pick uniformly at
+random" rule assumes. To make that rule real for OpenCode, the generator
+emits one agent file **per candidate**, suffixed `--<model>`, whenever a
+tier lists more than one OpenCode candidate:
+
+| Agent | Tier | Effort | Candidate |
+|-------|------|--------|-----------|
+| `delivery-standard-low--minimax-m3` | `standard` | low | `minimax-m3` |
+| `delivery-standard-low--kimi-k2.7-code` | `standard` | low | `kimi-k2.7-code` |
+
+For OpenCode, "picks one candidate ... uniformly at random from that tier's
+list" (above) means: list the `delivery-<tier>-<effort>--*` agent files (or
+read `tiers.json`'s candidate list directly) and choose which **file** to
+dispatch to. A tier with a single OpenCode candidate keeps the plain
+unsuffixed name, same as Claude/Codex.
 
 Dispatch to that agent name instead of a generic subagent. Re-run the sync
 script after editing `tiers.json` — the agent files are generated output,

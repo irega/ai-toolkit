@@ -42,20 +42,36 @@ tier_efforts() { jq -r --arg t "$1" '.tiers[$t].efforts[]' "$TIERS"; }
 tier_purpose() { jq -r --arg t "$1" '.tiers[$t].purpose' "$TIERS"; }
 
 # Agent id for a (tier, effort) pair, e.g. standard + low -> delivery-standard-low.
-agent_name() { echo "delivery-${1//_/-}-$2"; }
+# A 3rd arg suffixes it with a candidate slug (delivery-standard-low--minimax-m3),
+# used when a runtime has more than one candidate to choose between.
+agent_name() {
+  local name="delivery-${1//_/-}-$2"
+  [ -n "${3:-}" ] && name="$name--$3"
+  echo "$name"
+}
 
 agent_description() {
   local tier="$1" effort="$2"
   echo "Pinned to the delivery-workflow \"$tier\" tier at $effort effort. $(tier_purpose "$tier")"
 }
 
-# First candidate for a runtime, or empty when that runtime has none.
-# Only one candidate can be pinned per agent file; tiers.json's rotation rule
-# applies to runtimes that can choose a model at dispatch time, which is
-# exactly the case these pinned files exist to cover.
+# First candidate for a runtime, or empty when that runtime has none. Used by
+# runtimes where tiers.json only ever lists one candidate (claude, codex).
 candidate_field() {
   jq -r --arg t "$1" --arg r "$2" --arg f "$3" \
     '.tiers[$t].candidates[$r][0][$f] // empty' "$TIERS"
+}
+
+# Number of candidates for a runtime in a tier (0 if the runtime has none).
+candidate_count() {
+  jq -r --arg t "$1" --arg r "$2" \
+    '.tiers[$t].candidates[$r] // [] | length' "$TIERS"
+}
+
+# Field from the Nth (0-based) candidate for a runtime.
+candidate_field_at() {
+  jq -r --arg t "$1" --arg r "$2" --arg i "$3" --arg f "$4" \
+    '.tiers[$t].candidates[$r][($i|tonumber)][$f] // empty' "$TIERS"
 }
 
 # Escapes a value for a TOML basic string. Tier purposes are prose and do
@@ -100,10 +116,20 @@ report_stale() {
 valid_agent_names() {
   local runtime="$1" tier
   for tier in $(tier_names); do
-    [ -n "$(candidate_field "$tier" "$runtime" model)" ] || continue
+    local count
+    count="$(candidate_count "$tier" "$runtime")"
+    [ "$count" -gt 0 ] || continue
     local effort
     for effort in $(tier_efforts "$tier"); do
-      agent_name "$tier" "$effort"
+      if [ "$count" -gt 1 ]; then
+        local i model
+        for ((i = 0; i < count; i++)); do
+          model="$(candidate_field_at "$tier" "$runtime" "$i" model)"
+          agent_name "$tier" "$effort" "$model"
+        done
+      else
+        agent_name "$tier" "$effort"
+      fi
     done
   done
 }
