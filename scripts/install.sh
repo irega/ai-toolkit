@@ -23,6 +23,12 @@ if ! command -v rtk &>/dev/null; then
   brew install rtk
 fi
 rtk init -g --auto-patch
+if command -v opencode &>/dev/null; then
+  rtk init -g --opencode
+fi
+if command -v codex &>/dev/null; then
+  rtk init -g --codex
+fi
 echo "RTK configured ($(rtk --version))."
 
 echo ""
@@ -147,6 +153,15 @@ echo ""
 if command -v node &>/dev/null; then
   echo "Installing Caveman..."
   (cd "$HOME" && curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash)
+  # The official installer only registers Codex as a per-session skill
+  # (/caveman), not always-on. Codex reads $CODEX_HOME/AGENTS.md (default
+  # ~/.codex/AGENTS.md) every session, so append the same fenced caveman
+  # block there that the installer already puts in opencode's AGENTS.md.
+  if command -v codex &>/dev/null; then
+    echo "Wiring Caveman always-on into Codex AGENTS.md..."
+    curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/src/tools/caveman-init.js \
+      | node - "${CODEX_HOME:-$HOME/.codex}" --only agents
+  fi
 else
   echo "WARNING: node not found. Caveman not installed."
   echo "    Install Node.js first, then: curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash"
