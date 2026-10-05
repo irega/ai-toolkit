@@ -29,11 +29,9 @@ bash scripts/detect-convention.sh
 (`scripts/` is inside this skill's directory.) It prints `openspec_dir` and
 `spec_docs`. Pick the first match:
 
-1. `openspec_dir` is not `none`: use OpenSpec's installed workflow for this
-   runtime, `/opsx:explore` (open-ended request) or `/opsx:propose` (clear
-   request). If those commands are not installed, run `openspec update`.
-   The artifact is `proposal.md`, `specs/<capability>/spec.md`, `design.md`,
-   `tasks.md`.
+1. `openspec_dir` is not `none`: OpenSpec. If this runtime lacks
+   `/opsx:explore` or `/opsx:propose`, run `openspec update`. The artifact
+   is `proposal.md`, `specs/<capability>/spec.md`, `design.md`, `tasks.md`.
 2. `spec_docs` lists a convention (ADRs, `SPEC.md`/`PRD.md`, issue
    templates, a docs/specs dir): write in that convention's format and
    location.
@@ -45,15 +43,23 @@ Never invent a convention the repo does not already have. Never run
 
 ## 2. Agree the design with the user
 
-**REQUIRED SUB-SKILL:** Use superpowers:brainstorming to reach the design.
-Its Spike and Bounded paths end in chat; this skill still writes the file
-in step 3. **REQUIRED SUB-SKILL** outside OpenSpec: use
-superpowers:writing-plans for the task breakdown, saved into the step 3
-file instead of its default location. With OpenSpec,
-`/opsx:propose` writes `tasks.md` instead.
+The tools depend on what step 1 picked:
+
+| Step 1 picked | Reach the design with | Write the artifact with |
+|---|---|---|
+| OpenSpec | `/opsx:explore` | `/opsx:propose` |
+| Any other convention, or none | **REQUIRED SUB-SKILL:** superpowers:brainstorming | **REQUIRED SUB-SKILL:** superpowers:writing-plans for the tasks |
+
+With OpenSpec, do not invoke brainstorming or writing-plans. OpenSpec's own
+commands read the project's specs and `config.yaml` rules.
+
+Outside OpenSpec, brainstorming's Spike and Bounded paths end in chat, but
+this skill still writes the file in step 3. Save brainstorming's spec and
+writing-plans' output into the step 3 artifact, not their default
+locations. Never write `docs/superpowers/` unless step 1 picked it.
 
 Write no artifact file until the user approves the design in chat. With
-OpenSpec, settle open questions before `/opsx:propose`, not after.
+OpenSpec, settle open questions in `/opsx:explore` before `/opsx:propose`.
 
 A required sub-skill not installed: ask the clarifying questions yourself,
 one at a time, propose 2–3 approaches with a recommendation, and get
