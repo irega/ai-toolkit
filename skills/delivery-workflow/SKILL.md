@@ -15,16 +15,17 @@ restate any phase's internal rules — `prepare-project`, `delivery-discovery`,
 carry their own tested rules; invoke them and enforce what happens between
 them.
 
-**Dispatch `prepare-project` and `delivery-pr` as subagents**, at the tier
-each declares in its own `SKILL.md` (`economy` for both) — they're
-mechanical (detection, packaging) with no need for this session's own
-model. Run `delivery-discovery` inline — it needs to talk to the human
-directly, a subagent can't relay that without adding a round-trip. See
-`references/contract.md`'s Capability tiers section for the fail-closed
-rule and the per-runtime dispatch mechanism (pinned OpenCode agents,
-explicit model param elsewhere) before dispatching either.
+**Run `prepare-project` inline** — it's a few detection commands, cheaper
+than a dispatch's fixed overhead (see contract.md's "Dispatch cost").
+**Dispatch `delivery-pr` as a subagent** at the tier its `SKILL.md`
+declares (`economy`) — packaging is mechanical, with no need for this
+session's own model. Run `delivery-discovery` inline — it needs to talk to
+the human directly, a subagent can't relay that without adding a
+round-trip. See `references/contract.md`'s Capability tiers section for
+the fail-closed rule and the per-runtime dispatch mechanism (pinned
+OpenCode agents, explicit model param elsewhere) before dispatching.
 
-A blocker inside `prepare-project` or `delivery-pr` (tool auth failure,
+A blocker inside `delivery-pr` (tool auth failure,
 missing CLI, etc.) is never a reason to keep going yourself, step by step,
 in this orchestrating context — retry the dispatch with the blocker's
 context added, re-dispatch fresh past it, or escalate to the operator per

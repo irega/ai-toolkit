@@ -41,6 +41,12 @@ the not-yet-existing behavior (it should fail/error), then implement.
 - Thinking "I'll verify manually after" before any code is written.
 - Treating "manual invocation" in the artifact as meaning no check runs first.
 
+**Keep test output out of this context.** RED/GREEN runs repeat many times
+per task. Run the focused test for the task, with quiet flags or the
+minimal reporter (through `rtk` or `tail` when available). When a full
+suite or build run is needed, dispatch it to `delivery-economy-low` and
+act on its summary. See the contract's "Dispatch cost" section.
+
 ## Rule 2: parallelize only what the artifact marked independent
 
 Read the task list's dependency annotations. Start a dependent task only
@@ -49,6 +55,12 @@ marked independent, dispatch them concurrently via subagents when the
 runtime supports it (e.g. Claude Code's Agent tool); run them one after
 another when it doesn't. Either way, Rule 1 applies per task regardless of
 whether it ran in parallel or sequentially.
+
+**Fan out only tasks worth a dispatch.** Each subagent costs a fixed
+overhead (see the contract's "Dispatch cost"). A trivial task (a few
+lines, one file) costs less than that overhead, so run trivial independent
+tasks one after another in the same context instead of one subagent each.
+Dispatch in parallel only the independent tasks that are each substantial.
 
 ## Rule 3: build only what the acceptance criteria ask for
 

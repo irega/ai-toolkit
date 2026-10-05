@@ -13,8 +13,15 @@ for the full phase list and tier contract).
 Run the repo's existing checks (lint, build, test suite) and compare the
 diff against the discovery artifact's acceptance criteria one by one. This
 is a mechanical pass/fail check, not judgment — dispatch it to the
-`delivery-economy-low` pinned agent. This phase does not implement fixes —
-see Step 4.
+`delivery-economy-low` pinned agent, which returns the summary the
+contract's "Dispatch cost" section defines, never the raw log. This phase
+does not implement fixes — see Step 4.
+
+**No repo checks to run → no dispatch.** If the repo has no lint, build, or
+test suite, the only work left is comparing the diff against the
+acceptance criteria. Do that inline and state in the phase report that no
+repo checks exist. Do not pay a dispatch to discover there is nothing to
+run.
 
 ## Step 2: fresh-context reviews — `standard` tier
 
@@ -37,6 +44,16 @@ Correctness and security both have to trace data and reachability to say
 anything useful, so they get the higher effort; the other three compare the
 diff against rules that are already written down, and `high_reasoning` is
 reserved for Step 5's spec reconciliation.
+
+**Small diff → one combined pass.** Each dispatch costs a fixed overhead
+(see the contract's "Dispatch cost"), so a fan-out of five passes on a tiny
+diff spends most of its tokens on overhead. When the diff is under about
+150 changed lines, came from a single discovery task, and does not touch a
+trust boundary, dispatch **one** fresh-context pass to
+`delivery-standard-medium` that covers correctness, simplicity, design, and
+conventions, with a separate verdict per lens. Otherwise use the table
+above, one pass per row. The combined pass is still a fresh context — it
+never runs in the context that ran Step 1.
 
 **Dispatch to the pinned agent by name — never a generic subagent with the
 effort written in the prompt.** No runtime accepts effort as a dispatch
@@ -72,11 +89,16 @@ not running it when there's a real gap.
 Non-user-flow acceptance criteria (internals, data shape, CLI output, pure
 functions) never need Playwright MCP regardless of E2E coverage.
 
-## Step 4: the gate — critical failures go back, not forward — `delivery-standard-low`
+E2E runs and Playwright snapshots are noisy output. Report them as the
+contract's "Dispatch cost" summary (pass/fail per criterion, the failing
+step, the decisive error line), not as raw logs or full page snapshots.
+
+## Step 4: the gate — critical failures go back, not forward — inline
 
 The severity judgment already happened in Steps 2-3 (each review states
 whether its findings are critical); this step applies the resulting
-verdicts, it doesn't re-judge them.
+verdicts, it doesn't re-judge them. That is mechanical, so run it inline in
+whichever context collected the verdicts — never as its own dispatch.
 
 A critical failure is: an unmet acceptance criterion, a failing repo check,
 or a review finding severe enough that shipping it would be a regression.
