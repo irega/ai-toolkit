@@ -10,12 +10,12 @@ list, capability tiers, and Engram checkpoint cadence — this skill doesn't
 restate them). Run orchestration decisions at the `high_reasoning` tier.
 
 This skill owns sequencing and the gates between phases. It does not
-restate any phase's internal rules — `prepare-project`, `delivery-discovery`,
+restate any phase's internal rules — `preparing-projects`, `delivery-discovery`,
 `delivery-implement`, `delivery-verify`, and `delivery-pr` each already
 carry their own tested rules; invoke them and enforce what happens between
 them.
 
-**Run `prepare-project` inline** — it's a few detection commands, cheaper
+**Run `preparing-projects` inline** — it's a few detection commands, cheaper
 than a dispatch's fixed overhead (see contract.md's "Dispatch cost").
 **Dispatch `delivery-pr` as a subagent** at the tier its `SKILL.md`
 declares (`economy`) — packaging is mechanical, with no need for this
@@ -34,7 +34,7 @@ after a blocker."
 
 ## Run every phase, every time — size changes effort, never which phases run
 
-`prepare-project` → `delivery-discovery` → `delivery-implement` →
+`preparing-projects` → `delivery-discovery` → `delivery-implement` →
 `delivery-verify` → `delivery-pr`, in order, for every request this skill
 handles — including ones that look tiny.
 

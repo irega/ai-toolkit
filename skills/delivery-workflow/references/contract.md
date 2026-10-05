@@ -1,6 +1,6 @@
 # Delivery workflow contract
 
-Shared reference for every `delivery-*` skill and `prepare-project`. Keep this
+Shared reference for every `delivery-*` skill and `preparing-projects`. Keep this
 file the single source of truth for phases, tiers, and Engram checkpoints —
 individual skills link here instead of restating it.
 
@@ -18,7 +18,7 @@ operator, not something any skill can pick or verify.
 | Phase | Runs as | Tier enforceable? |
 |-------|---------|--------------------|
 | `delivery-workflow` (orchestrator) | Inline, in the invoking session | No — the operator's session model is the ceiling; this is advisory only |
-| `prepare-project` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
+| `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `delivery-discovery` | Inline (brainstorming needs to talk to the human) | No — advisory only |
 | `delivery-implement` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
 | `delivery-verify` | Dispatched per step, per its own Steps 1-3 | Yes, bounded (see below) |
@@ -191,9 +191,9 @@ the raw log. The caller decides what to do with that summary; the
 
 ## Phases
 
-1. `prepare-project` — detect project conventions (OpenSpec/SDD), enable
-   Caveman/RTK/CodeGraph if available, recover Engram checkpoints. Missing
-   optional capabilities degrade with explicit evidence, never silently.
+1. `preparing-projects` — detect project conventions (OpenSpec/SDD), index
+   with CodeGraph, check RTK, recover Engram checkpoints. Its report feeds
+   phase 2; the orchestrator saves the phase-transition checkpoint.
 2. `delivery-discovery` — produce source spec/plan, acceptance criteria,
    risks, tests, tasks with dependencies.
 3. `delivery-implement` — strict TDD per independent deliverable, parallelize
