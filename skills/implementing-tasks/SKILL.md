@@ -38,12 +38,10 @@ code exists and record its error.
 - One edit or command writes both the test and the code.
 - "I'll verify manually after."
 
-**Small output, real exit status.** Run focused checks inline with quiet
-flags, through `rtk` or `tail`. A pipe into `tail` hides the exit code:
+**Small output, real exit status.** Every test, suite, or build run,
+focused or full, goes to a log file. Read back only the summary and the
+decisive error line. A pipe into `tail` hides the exit code, so capture it:
 `cmd > "$TMPDIR/out.log" 2>&1; echo "exit=$?"; tail -n 20 "$TMPDIR/out.log"`.
-A full suite or build whose output runs past ~50 lines: if the
-`delivery-economy-low` agent exists, dispatch it there and ask only for pass/fail, failing test names, and the decisive
-error line. Otherwise run it inline with a minimal reporter.
 
 ## Rule 2: follow the dependency annotations
 
