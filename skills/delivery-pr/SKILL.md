@@ -9,7 +9,7 @@ Final phase of the delivery workflow (see `../delivery-workflow/references/contr
 for the full phase list). Only runs after `delivery-verify`'s gates passed.
 The orchestrator dispatches this phase as a subagent at the `economy`
 tier — the heavy decisions (what's independent, whether it's ready) already
-happened in `delivery-discovery` and `delivery-verify`; this phase packages
+happened in `planning-changes` and `delivery-verify`; this phase packages
 that into PRs, it doesn't re-judge it. Opening the PR as a draft (Rule 1) is
 the safety gate — it's the authorization the human already gave by invoking
 `delivery-workflow`, so this phase doesn't need to check back in before
@@ -18,7 +18,7 @@ pushing and opening it.
 ## Rule 1: one PR per independent concern, always draft
 
 Split the diff into separate PRs along the same independence lines
-`delivery-discovery`'s tasks used — an unrelated bundle of small changes
+`planning-changes`'s tasks used — an unrelated bundle of small changes
 (e.g. a README tweak plus an unrelated script) is not one PR just because
 it landed in one commit or one branch. Recommend a feature/integration
 branch, with each small PR targeting it instead of the repo's main branch,
