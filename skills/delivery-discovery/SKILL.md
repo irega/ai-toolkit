@@ -1,6 +1,6 @@
 ---
 name: delivery-discovery
-description: Use when starting phase 2 of the delivery workflow (after prepare-project, before delivery-implement), to turn a request into a spec/plan with acceptance criteria, risks, tests, and dependency-ordered tasks.
+description: Use when starting phase 2 of the delivery workflow (after preparing-projects, before delivery-implement), to turn a request into a spec/plan with acceptance criteria, risks, tests, and dependency-ordered tasks.
 ---
 
 # delivery-discovery

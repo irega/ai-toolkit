@@ -41,7 +41,7 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 |-------|---------|
 | [handoff](skills/handoff/SKILL.md) | Compact the current conversation into a handoff doc for another agent |
 | [delivery-workflow](skills/delivery-workflow/SKILL.md) | Entrypoint: orchestrates the phases below for a request, end to end |
-| [prepare-project](skills/prepare-project/SKILL.md) | Phase 1: detect spec conventions, enable CodeGraph/RTK/Caveman, recover Engram state |
+| [preparing-projects](skills/preparing-projects/SKILL.md) | Phase 1: detect spec conventions, index with CodeGraph, check RTK, recover Engram memory |
 | [delivery-discovery](skills/delivery-discovery/SKILL.md) | Phase 2: produce a spec/plan with acceptance criteria, risks, tests, tasks |
 | [delivery-implement](skills/delivery-implement/SKILL.md) | Phase 3: TDD per task, parallelizing only independent ones |
 | [delivery-verify](skills/delivery-verify/SKILL.md) | Phase 4: conformance checks, fresh-context reviews, E2E evidence, spec reconciliation |
