@@ -45,11 +45,15 @@ decisive error line. A pipe into `tail` hides the exit code, so capture it:
 
 ## Rule 2: follow the dependency annotations
 
-Start a dependent task only after all its dependencies passed GREEN.
-Each subagent dispatch costs roughly 25k tokens of fixed overhead, so
-dispatch tasks to parallel subagents only when 2 or more independent tasks
-are ready at once and each of them is expected to change about 150 lines
-or more, tests included. Run every other task in sequence in this context.
+Start a dependent task only after all its dependencies passed GREEN. A
+subagent costs roughly 25k tokens of fixed overhead, so use parallel
+subagents only when 2 or more independent tasks are ready at once and each
+is expected to change about 150 lines or more, tests included. Run every
+other task in sequence here.
+
+Dispatch to the `delivery-standard-medium` agent if it exists (with
+`delivery-standard-medium--<model>` variants, pick one at random).
+Otherwise use a generic subagent, which inherits this session's model.
 
 ## Rule 3: build only what the acceptance criteria ask for
 
@@ -76,4 +80,5 @@ free text. One `###` block per task, in the order run.
 
 - Suite: `<command>` -> pass | fail: <failing test names>
 - Not done: <task id>: <reason>, one per line | none
+- Dispatch: none | <agent name> | generic subagent (model unpinned)
 ```
