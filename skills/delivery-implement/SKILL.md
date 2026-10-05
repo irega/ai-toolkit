@@ -1,13 +1,13 @@
 ---
 name: delivery-implement
-description: Use when starting phase 3 of the delivery workflow (after delivery-discovery, before delivery-verify), to build the tasks in a discovery artifact under strict TDD without over-scoping.
+description: Use when starting phase 3 of the delivery workflow (after planning-changes, before delivery-verify), to build the tasks in a discovery artifact under strict TDD without over-scoping.
 ---
 
 # delivery-implement
 
 Phase 3 of the delivery workflow (see `../delivery-workflow/references/contract.md`
 for the full phase list and tier contract). Run this phase at the `standard`
-tier. Input is the discovery artifact `delivery-discovery` produced — its
+tier. Input is the discovery artifact `planning-changes` produced — its
 tasks list is authoritative for scope and dependencies.
 
 **REQUIRED BACKGROUND:** superpowers:test-driven-development.

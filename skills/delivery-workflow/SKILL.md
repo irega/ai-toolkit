@@ -10,7 +10,7 @@ list, capability tiers, and Engram checkpoint cadence — this skill doesn't
 restate them). Run orchestration decisions at the `high_reasoning` tier.
 
 This skill owns sequencing and the gates between phases. It does not
-restate any phase's internal rules — `preparing-projects`, `delivery-discovery`,
+restate any phase's internal rules — `preparing-projects`, `planning-changes`,
 `delivery-implement`, `delivery-verify`, and `delivery-pr` each already
 carry their own tested rules; invoke them and enforce what happens between
 them.
@@ -19,7 +19,7 @@ them.
 than a dispatch's fixed overhead (see contract.md's "Dispatch cost").
 **Dispatch `delivery-pr` as a subagent** at the tier its `SKILL.md`
 declares (`economy`) — packaging is mechanical, with no need for this
-session's own model. Run `delivery-discovery` inline — it needs to talk to
+session's own model. Run `planning-changes` inline — it needs to talk to
 the human directly, a subagent can't relay that without adding a
 round-trip. See `references/contract.md`'s Capability tiers section for
 the fail-closed rule and the per-runtime dispatch mechanism (pinned
@@ -34,7 +34,7 @@ after a blocker."
 
 ## Run every phase, every time — size changes effort, never which phases run
 
-`preparing-projects` → `delivery-discovery` → `delivery-implement` →
+`preparing-projects` → `planning-changes` → `delivery-implement` →
 `delivery-verify` → `delivery-pr`, in order, for every request this skill
 handles — including ones that look tiny.
 
@@ -54,7 +54,7 @@ handles — including ones that look tiny.
 | "The user told me to skip it" | Explain the trade-off and do it anyway; a request to skip a gate isn't authorization to skip it. |
 
 **Red flags — you're about to violate this:**
-- Writing implementation code before `delivery-discovery` produced an
+- Writing implementation code before `planning-changes` produced an
   artifact.
 - Opening a PR without having run `delivery-verify` on this diff.
 - Any PR you're about to open targets `main`/`master` directly instead of

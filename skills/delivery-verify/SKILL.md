@@ -124,7 +124,7 @@ evidence.
 - **No divergence** → conformance holds, proceed to `delivery-pr`.
 - **Divergence that's an accepted behavior/design change** (prompted by the
   user or surfaced and accepted during review) → update the source spec
-  artifact (the OpenSpec files, or whatever `delivery-discovery` produced)
+  artifact (the OpenSpec files, or whatever `planning-changes` produced)
   on the same branch, persist the decision in Engram, then repeat Step 1's
   conformance check against the updated spec.
 - **Divergence that's just what the code happens to do** → this is a
