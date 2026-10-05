@@ -20,7 +20,7 @@ operator, not something any skill can pick or verify.
 | `delivery-workflow` (orchestrator) | Inline, in the invoking session | No — the operator's session model is the ceiling; this is advisory only |
 | `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `planning-changes` | Inline (brainstorming needs to talk to the human) | No — advisory only |
-| `delivery-implement` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
+| `implementing-tasks` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
 | `delivery-verify` | Dispatched per step, per its own Steps 1-3 | Yes, bounded (see below) |
 | `delivery-pr` | Dispatched as a subagent by the orchestrator | Yes |
 
@@ -140,7 +140,7 @@ behaviour this file asks for everywhere else, not a silent pass.
 
 ## Interaction with subagent-driven-development
 
-`delivery-implement` and `delivery-verify` dispatch subagents for individual
+`implementing-tasks` and `delivery-verify` dispatch subagents for individual
 tasks and reviews. Don't re-implement model selection for those dispatches —
 `superpowers:subagent-driven-development`'s own Model Selection section
 already picks a model per task by complexity, and its "always specify the
@@ -196,7 +196,7 @@ the raw log. The caller decides what to do with that summary; the
    phase 2; the orchestrator saves the phase-transition checkpoint.
 2. `planning-changes` — produce source spec/plan, acceptance criteria,
    risks, tests, tasks with dependencies.
-3. `delivery-implement` — strict TDD per independent deliverable, parallelize
+3. `implementing-tasks` — strict TDD per independent deliverable, parallelize
    only independent tasks, apply Ponytail/YAGNI.
 4. `delivery-verify` — run repo checks and acceptance/spec conformance;
    fresh-context reviews (correctness, simplicity, design, conventions,
@@ -204,7 +204,7 @@ the raw log. The caller decides what to do with that summary; the
    E2E test if one covers it, otherwise run Playwright MCP for that
    criterion regardless of unit/integration coverage (unit/integration
    don't substitute for E2E on a user-flow criterion); critical failures
-   return to `delivery-implement`.
+   return to `implementing-tasks`.
 5. Spec reconciliation (inside verify) — compare source spec/plan, diff,
    tests, and E2E evidence; for an accepted behavior/design change, update
    the source spec artifact on the same branch and persist the decision in

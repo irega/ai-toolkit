@@ -1,6 +1,6 @@
 ---
 name: delivery-verify
-description: Use when starting phase 4 of the delivery workflow (after delivery-implement, before delivery-pr), to run conformance checks, fresh-context reviews, select E2E evidence, and reconcile the spec with what was actually built.
+description: Use when starting phase 4 of the delivery workflow (after implementing-tasks, before delivery-pr), to run conformance checks, fresh-context reviews, select E2E evidence, and reconcile the spec with what was actually built.
 ---
 
 # delivery-verify
@@ -104,12 +104,12 @@ A critical failure is: an unmet acceptance criterion, a failing repo check,
 or a review finding severe enough that shipping it would be a regression.
 
 On a critical failure: **stop, do not implement the fix yourself, and
-route back to `delivery-implement`** with the specific failure named. Do
+route back to `implementing-tasks`** with the specific failure named. Do
 not pass it to `delivery-pr` with a note to fix later, and do not patch it
 inline just because the fix looks small — that skips Step 1's repo checks
 and Step 2's fresh-context reviews for the patched code, and blurs a phase
 boundary that exists so implementation changes always go through
-`delivery-implement`'s TDD discipline.
+`implementing-tasks`'s TDD discipline.
 
 **No exceptions:**
 - "It's a one-line fix" doesn't move it into this phase.
