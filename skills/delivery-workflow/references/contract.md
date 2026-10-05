@@ -18,13 +18,13 @@ operator, not something any skill can pick or verify.
 | Phase | Runs as | Tier enforceable? |
 |-------|---------|--------------------|
 | `delivery-workflow` (orchestrator) | Inline, in the invoking session | No — the operator's session model is the ceiling; this is advisory only |
-| `prepare-project` | Dispatched as a subagent by the orchestrator | Yes |
+| `prepare-project` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `delivery-discovery` | Inline (brainstorming needs to talk to the human) | No — advisory only |
-| `delivery-implement` | Dispatched per task, per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
-| `delivery-verify` | Dispatched per step, per its own Steps 2-3 | Yes, bounded (see below) |
+| `delivery-implement` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
+| `delivery-verify` | Dispatched per step, per its own Steps 1-3 | Yes, bounded (see below) |
 | `delivery-pr` | Dispatched as a subagent by the orchestrator | Yes |
 
-**Never inline, not even after a blocker.** For the four dispatchable
+**Never inline, not even after a blocker.** For the three dispatchable
 phases, the orchestrator dispatches a subagent and stays out of that
 phase's actual work — diagnosing a failure, drafting the PR body, running
 the push, resolving an auth/tooling blocker. Hitting a blocker mid-phase
@@ -37,7 +37,7 @@ context after one blocked dispatch attempt is the same fail-open failure
 this section exists to prevent, whether the excuse is a missing config
 file or "I already had the context loaded, easier to finish it myself."
 
-For the four dispatchable phases, the orchestrator (or the phase itself, for
+For the three dispatchable phases, the orchestrator (or the phase itself, for
 implement/verify's internal fan-out) picks one candidate compatible with the
 current runtime uniformly at random from that tier's list (a tier/runtime
 with a single candidate always picks that one).
@@ -158,7 +158,36 @@ a model outside the tier's candidate list for that phase.
 |------|---------|---------|
 | `high_reasoning` | high | Orchestrator (scope, routing, spec reconciliation), discovery/planning |
 | `standard` | low, medium | Implementation, fresh-context reviews |
-| `economy` | low | Mechanical/cheap checks only — never substantive planning or review |
+| `economy` | low | Mechanical/cheap checks only (including noisy test/build runs) — never substantive planning or review |
+
+## Dispatch cost
+
+Every subagent dispatch pays a fixed overhead of roughly 25k tokens (system
+prompt, tool definitions, re-reading context) before it does any work. A
+dispatch is worth it only when the work it takes off the caller's context
+is bigger than that overhead, or when a fresh context is the point (an
+independent review).
+
+- **Small work stays inline.** A handful of commands, a trivial task, or
+  applying verdicts that already exist costs less inline than dispatched.
+  The phase skills name which steps run inline.
+- **A small diff gets one review pass, not a fan-out.** See
+  `delivery-verify` Step 2 for the threshold.
+
+**Noisy output, easy judgment.** Test suites, builds, linters, and E2E
+runs print large logs whose interpretation is trivial (pass or fail, which
+test, which line). Pick the cheapest channel that keeps the log out of an
+expensive context:
+
+| Expected output | Channel |
+|-----------------|---------|
+| Short (a focused test, one file's lint) | Run inline, with quiet flags or the minimal reporter, piped through `rtk` or `tail` when available |
+| Large (full suite, full build, E2E run) | Dispatch to `delivery-economy-low` |
+
+The `economy` dispatch returns only: pass/fail, the names of failing
+tests or checks, and the shortest decisive error line for each — never
+the raw log. The caller decides what to do with that summary; the
+`economy` agent never judges whether a failure matters.
 
 ## Phases
 

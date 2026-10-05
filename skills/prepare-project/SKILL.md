@@ -7,9 +7,9 @@ description: Use when starting phase 1 of the delivery workflow (before delivery
 
 Phase 1 of the delivery workflow (see `../delivery-workflow/references/contract.md`
 for the full phase list and tier contract — this skill doesn't restate it).
-The orchestrator dispatches this phase as a subagent at the `economy`
-tier — detection and setup here are mechanical, no judgment call, and no
-need for the orchestrating session's own model.
+The orchestrator runs this phase inline, in its own session — detection
+and setup here are a few mechanical commands, cheaper than a subagent
+dispatch's fixed overhead (see the contract's "Dispatch cost").
 
 ## What to do, in order
 
