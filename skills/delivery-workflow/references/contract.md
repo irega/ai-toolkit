@@ -158,7 +158,7 @@ a model outside the tier's candidate list for that phase.
 |------|---------|---------|
 | `high_reasoning` | high | Orchestrator (scope, routing, spec reconciliation), discovery/planning |
 | `standard` | low, medium | Implementation, fresh-context reviews |
-| `economy` | low | Mechanical/cheap checks only (including noisy test/build runs) — never substantive planning or review |
+| `economy` | low | Mechanical/cheap checks only — never substantive planning or review |
 
 ## Dispatch cost
 
@@ -176,18 +176,11 @@ independent review).
 
 **Noisy output, easy judgment.** Test suites, builds, linters, and E2E
 runs print large logs whose interpretation is trivial (pass or fail, which
-test, which line). Pick the cheapest channel that keeps the log out of an
-expensive context:
-
-| Expected output | Channel |
-|-----------------|---------|
-| Short (a focused test, one file's lint) | Run inline, with quiet flags or the minimal reporter, piped through `rtk` or `tail` when available |
-| Large (full suite, full build, E2E run) | Dispatch to `delivery-economy-low` |
-
-The `economy` dispatch returns only: pass/fail, the names of failing
-tests or checks, and the shortest decisive error line for each — never
-the raw log. The caller decides what to do with that summary; the
-`economy` agent never judges whether a failure matters.
+test, which line). Run them inline, redirect the output to a log file,
+capture the exit status, and read back only: pass/fail, the names of
+failing tests or checks, and the shortest decisive error line for each.
+Never the raw log. A log file keeps the output out of context without a
+dispatch's fixed overhead, so noisy runs are not a reason to dispatch.
 
 ## Phases
 

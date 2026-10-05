@@ -46,14 +46,18 @@ decisive error line. A pipe into `tail` hides the exit code, so capture it:
 ## Rule 2: follow the dependency annotations
 
 Start a dependent task only after all its dependencies passed GREEN.
-Independent tasks may run in parallel subagents, but each dispatch costs
-roughly 25k tokens of fixed overhead. Run trivial tasks (a few lines, one
-file) in sequence here; dispatch only substantial independent ones.
+Each subagent dispatch costs roughly 25k tokens of fixed overhead, so
+dispatch tasks to parallel subagents only when 2 or more independent tasks
+are ready at once and each of them is expected to change about 150 lines
+or more, tests included. Run every other task in sequence in this context.
 
 ## Rule 3: build only what the acceptance criteria ask for
 
-No extra flags, validation, or defensive code they did not name. Something
-seems missing: report it under `Gaps`, do not add it.
+Before each GREEN, check every line you added against the acceptance
+criteria. A line is extra when no criterion or test needs it: a parameter,
+option, flag, branch, validation, fallback, error handler, or abstraction
+the criteria do not mention. Delete extra lines. If one seems necessary,
+report it under `Gaps` instead of keeping it.
 
 ## Report
 
