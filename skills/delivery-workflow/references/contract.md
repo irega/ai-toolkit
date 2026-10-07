@@ -21,7 +21,7 @@ operator, not something any skill can pick or verify.
 | `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `planning-changes` | Inline (brainstorming needs to talk to the human) | No — advisory only |
 | `implementing-tasks` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
-| `verifying-changes` | Inline; dispatches only an unclear criterion judgment to `delivery-high-reasoning-high` | Yes, for that dispatch only |
+| `verifying-changes` | Inline, except Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and spec reconciliation or unclear criterion judgments (`high_reasoning`) | Yes, for those dispatches |
 | `reviewing-changes` | Dispatched, one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
 | `delivery-pr` | Dispatched as a subagent by the orchestrator | Yes |
 
@@ -150,8 +150,8 @@ model explicitly" rule already gives the same fail-closed guarantee this
 file asks for elsewhere.
 
 The two systems compose, they don't compete: this file's tier
-(`standard` for implement and review, `high_reasoning` for verify's one
-dispatch) sets the **pool** of candidates that phase may draw from;
+(`standard` for implement and review, mixed per dispatch for verify) sets
+the **pool** of candidates that phase may draw from;
 `subagent-driven-development`'s complexity heuristic picks **which candidate in that pool**, and decides
 when to escalate within it (e.g. fix-loop rounds 4-5). Neither system picks
 a model outside the tier's candidate list for that phase.

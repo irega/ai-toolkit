@@ -49,16 +49,17 @@ output, or an E2E result. Passing tests that do not assert the criterion
 are not evidence. No evidence: `unmet`.
 
 Whether a criterion is met is unclear: dispatch that single judgment to
-`delivery-high-reasoning-high` if it exists, otherwise a generic subagent
-(effort unpinned).
+`delivery-high-reasoning-high` if it exists (see Dispatch below).
 
 ## 3. E2E evidence for user flows
 
 For each criterion that describes a user-facing flow:
 
-1. A repo E2E test covers it: run that test. Do not also run Playwright MCP.
+1. A repo E2E test covers it: run that test inline, logged as in step 1.
+   Do not also run Playwright MCP.
 2. No E2E covers it: drive the flow with Playwright MCP, even when unit
-   tests pass. They do not prove the flow.
+   tests pass. They do not prove the flow. Snapshots are noisy, so dispatch
+   this to `delivery-standard-medium` if it exists (see Dispatch below).
 3. Playwright MCP unavailable: `missing evidence`. Never claim a pass.
 
 Other criteria never need E2E. Report results, not snapshots.
@@ -74,6 +75,17 @@ Compare the spec, the diff, the tests, and the E2E evidence:
   repeat steps 1-3.
 - **Unaccepted divergence:** a critical failure. Never edit the spec to
   match the code.
+
+Dispatch this comparison to `delivery-high-reasoning-high` if it exists
+(see Dispatch below).
+
+## Dispatch
+
+Each dispatch goes to the pinned agent named above if it exists, with
+`<agent>--<model>` variants picking one at random. Otherwise use a generic
+subagent, which inherits this session's model; the verdict says so. All
+other work runs inline. A dispatch costs about 25k tokens of fixed
+overhead, so never dispatch for a few commands.
 
 ## Verdict
 
@@ -93,5 +105,5 @@ free text.
 - Reconciliation: no divergence | accepted change, spec updated: <path> | unaccepted divergence: <where, what>
 - Verdict: PASS | FAIL | BLOCKED
 - Failures: <failure>, one per line | none
-- Dispatch: none | <agent name> | generic subagent (effort unpinned)
+- Dispatch: <step>: <agent name> | generic subagent (effort unpinned), one per dispatch | none
 ```
