@@ -65,11 +65,6 @@ Some servers may need env vars (e.g. an extension token). Copy `.env.example` to
 `.env.local` and fill it in before running `scripts/mcp/sync-mcp.sh` — values
 get injected into the server registration.
 
-To enable Azure DevOps MCP, set `AZURE_DEVOPS_ORGS=org-a,org-b` in `.env.local`.
-Sync registers one instance per organization in Codex, Claude, and OpenCode.
-Removed organizations are unregistered on sync; unset the variable to remove
-all managed Azure DevOps instances.
-
 ## Scripts
 
 `install.sh` runs all of these, but each can also be run standalone:
