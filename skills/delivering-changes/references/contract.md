@@ -38,11 +38,15 @@ model, so its tier is advisory.
 ## Dispatch
 
 Dispatch to the pinned agent `delivery-<tier>-<effort>`, never a generic
-subagent when the pinned one exists. With `--<model>` variants, pick one at
-random. How the agents are generated: `scripts/agents/README.md`.
+subagent when the pinned one exists. A tier with several candidates for
+this runtime has one agent per candidate, `delivery-<tier>-<effort>--<model>`
+(today only OpenCode). List those agents and pick one uniformly at random.
+A single candidate keeps the plain name. How the agents are generated:
+`scripts/agents/README.md`.
 
 **Retry.** A candidate that errors at call time (rate limit, no credit,
-unavailable): retry with another candidate of the same tier and runtime.
+unavailable): retry with another `--<model>` agent of the same tier,
+not the one that failed.
 None left: report the failure. Never drop to another tier. Record the
 agent used, and any retry, in the phase's Engram checkpoint.
 
