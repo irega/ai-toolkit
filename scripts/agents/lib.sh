@@ -4,12 +4,12 @@
 # None of the three runtimes (Claude Code, Codex, OpenCode) accepts a
 # reasoning-effort argument on an ad-hoc subagent dispatch — effort is only
 # configurable on a subagent that was defined ahead of time as a file. These
-# helpers turn skills/delivery-workflow/tiers.json into exactly those files,
+# helpers turn skills/delivering-changes/tiers.json into exactly those files,
 # one per (tier, effort) pair, from the templates in ./templates/.
 
 AGENTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$AGENTS_DIR/../.." && pwd)"
-TIERS="$REPO/skills/delivery-workflow/tiers.json"
+TIERS="$REPO/skills/delivering-changes/tiers.json"
 TEMPLATES="$AGENTS_DIR/templates"
 
 # Lines equal to this marker are dropped from rendered output, so a template
@@ -52,7 +52,7 @@ agent_name() {
 
 agent_description() {
   local tier="$1" effort="$2"
-  echo "Pinned to the delivery-workflow \"$tier\" tier at $effort effort. $(tier_purpose "$tier")"
+  echo "Pinned to the delivering-changes \"$tier\" tier at $effort effort. $(tier_purpose "$tier")"
 }
 
 # First candidate for a runtime, or empty when that runtime has none. Used by

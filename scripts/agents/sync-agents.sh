@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Dispatcher: turns skills/delivery-workflow/tiers.json into pinned subagents
+# Dispatcher: turns skills/delivering-changes/tiers.json into pinned subagents
 # for whichever of claude/codex/opencode CLIs are installed. Each sub-script
 # is standalone and can also be run directly.
 

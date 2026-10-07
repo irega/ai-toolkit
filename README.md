@@ -40,8 +40,8 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | Skill | Purpose |
 |-------|---------|
 | [handoff](skills/handoff/SKILL.md) | Compact the current conversation into a handoff doc for another agent |
-| [delivery-workflow](skills/delivery-workflow/SKILL.md) | Entrypoint: orchestrates the phases below for a request, end to end |
-| [preparing-projects](skills/preparing-projects/SKILL.md) | Phase 1: detect spec conventions, index with CodeGraph, check RTK, recover Engram memory |
+| [delivering-changes](skills/delivering-changes/SKILL.md) | Full delivery run: prepare, plan, implement, verify, review, and open draft PRs, in order, with gates between phases |
+| [preparing-projects](skills/preparing-projects/SKILL.md) | Detect spec conventions, index with CodeGraph, check RTK, recover Engram memory |
 | [planning-changes](skills/planning-changes/SKILL.md) | Plan a change: spec/plan with acceptance criteria, risks, tests, tasks |
 | [implementing-tasks](skills/implementing-tasks/SKILL.md) | Implement a plan: test-first per task, RED/GREEN report |
 | [verifying-changes](skills/verifying-changes/SKILL.md) | Verify a change against its spec: repo checks, evidence per criterion, E2E, spec drift |
@@ -76,6 +76,6 @@ get injected into the server registration.
 | `scripts/unlink-skills.sh` | Remove broken skill symlinks from all three skill directories |
 | `scripts/mcp/sync-mcp.sh` | Dispatcher: registers MCP servers from `configs/mcp-servers.json` into whichever of claude/codex/opencode are installed |
 | `scripts/mcp/sync-mcp-<assistant>.sh` | Register MCP servers with one specific assistant (`claude`, `codex`, or `opencode`) only |
-| `scripts/agents/sync-agents.sh` | Dispatcher: generates one pinned subagent per (tier, effort) pair in `skills/delivery-workflow/tiers.json` for whichever of claude/codex/opencode are installed — no runtime accepts a model or effort argument on an ad-hoc dispatch, so a predefined agent is the only channel |
+| `scripts/agents/sync-agents.sh` | Dispatcher: generates one pinned subagent per (tier, effort) pair in `skills/delivering-changes/tiers.json` for whichever of claude/codex/opencode are installed — no runtime accepts a model or effort argument on an ad-hoc dispatch, so a predefined agent is the only channel |
 | `scripts/agents/sync-agents-<assistant>.sh` | Generate pinned subagents for one specific assistant (`claude`, `codex`, or `opencode`) only, rendered from `scripts/agents/templates/` |
 | `scripts/agents/prune-agents.sh` | Remove `delivery-*` pinned agents that current `tiers.json` would not generate — leftovers from a renamed/removed tier or an old naming scheme |

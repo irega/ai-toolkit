@@ -1,13 +1,23 @@
-# Delivery workflow contract
+# Delivering changes: reference
 
-Shared reference for every `delivery-*` skill and `preparing-projects`. Keep this
-file the single source of truth for phases, tiers, and Engram checkpoints —
-individual skills link here instead of restating it.
+The orchestrator's own reference for tiers, pinned agents, dispatch policy,
+phases, commits, and Engram checkpoints. Phase skills are standalone and do
+not link here.
+
+## Contents
+
+- Capability tiers
+- Pinned agents: the only channel for effort
+- Interaction with subagent-driven-development
+- Dispatch cost
+- Phases
+- Commits
+- Engram checkpoints
 
 ## Capability tiers
 
 Never hard-code a provider or model name inside a skill. Read tier candidates
-from `tiers.json` at the skill root — `skills/delivery-workflow/tiers.json`,
+from `tiers.json` at the skill root — `skills/delivering-changes/tiers.json`,
 one level **above** this `references/` folder, not inside it.
 
 **Which phases this applies to.** Only phases that actually get dispatched
@@ -17,16 +27,16 @@ operator, not something any skill can pick or verify.
 
 | Phase | Runs as | Tier enforceable? |
 |-------|---------|--------------------|
-| `delivery-workflow` (orchestrator) | Inline, in the invoking session | No — the operator's session model is the ceiling; this is advisory only |
+| `delivering-changes` (orchestrator) | Inline, in the invoking session | No — the operator's session model is the ceiling; this is advisory only |
 | `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `planning-changes` | Inline (brainstorming needs to talk to the human) | No — advisory only |
-| `implementing-tasks` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
-| `verifying-changes` | Inline, except Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and spec reconciliation or unclear criterion judgments (`high_reasoning`) | Yes, for those dispatches |
-| `reviewing-changes` | Dispatched, one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
-| `opening-pull-requests` | Dispatched as a subagent by the orchestrator | Yes |
+| `implementing-tasks` | Inline; fans out subagents per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
+| `verifying-changes` | Inline; dispatches Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and spec reconciliation or unclear criterion judgments (`high_reasoning`) | Yes, for those dispatches |
+| `reviewing-changes` | Inline; dispatches one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
+| `opening-pull-requests` | Dispatched as a subagent by the orchestrator (`economy` tier, `delivery-economy-low`) | Yes |
 
-**Never inline, not even after a blocker.** For the four dispatchable
-phases, the orchestrator dispatches a subagent and stays out of that
+**Never inline, not even after a blocker.** For a phase the orchestrator
+dispatches (`opening-pull-requests`), it stays out of that
 phase's actual work — diagnosing a failure, drafting the PR body, running
 the push, resolving an auth/tooling blocker. Hitting a blocker mid-phase
 (e.g. `gh`/host-CLI auth failure) is not authorization to take the rest of
@@ -38,8 +48,8 @@ context after one blocked dispatch attempt is the same fail-open failure
 this section exists to prevent, whether the excuse is a missing config
 file or "I already had the context loaded, easier to finish it myself."
 
-For the four dispatchable phases, the orchestrator (or the phase itself, for
-implement/verify/review's internal fan-out) picks one candidate compatible
+For dispatched work, the orchestrator (or the phase skill itself, for
+implementing, verifying, and reviewing's internal fan-out) picks one candidate compatible
 with the current runtime uniformly at random from that tier's list (a
 tier/runtime with a single candidate always picks that one).
 
@@ -142,7 +152,8 @@ behaviour this file asks for everywhere else, not a silent pass.
 ## Interaction with subagent-driven-development
 
 `implementing-tasks`, `verifying-changes`, and `reviewing-changes` dispatch
-subagents for individual tasks, checks, and reviews. Don't re-implement
+subagents for individual tasks, checks, and reviews. The orchestrator does
+not re-implement
 model selection for those dispatches —
 `superpowers:subagent-driven-development`'s own Model Selection section
 already picks a model per task by complexity, and its "always specify the
@@ -150,7 +161,7 @@ model explicitly" rule already gives the same fail-closed guarantee this
 file asks for elsewhere.
 
 The two systems compose, they don't compete: this file's tier
-(`standard` for implement and review, mixed per dispatch for verify) sets
+(`standard` for implementing and reviewing, mixed per dispatch for verifying) sets
 the **pool** of candidates that phase may draw from;
 `subagent-driven-development`'s complexity heuristic picks **which candidate in that pool**, and decides
 when to escalate within it (e.g. fix-loop rounds 4-5). Neither system picks
@@ -158,7 +169,7 @@ a model outside the tier's candidate list for that phase.
 
 | Tier | Efforts | Used by |
 |------|---------|---------|
-| `high_reasoning` | high | Orchestrator (scope, routing, spec reconciliation), discovery/planning |
+| `high_reasoning` | high | Orchestrator (scope, routing, spec reconciliation), planning |
 | `standard` | low, medium | Implementation, fresh-context reviews |
 | `economy` | low | Mechanical/cheap checks only — never substantive planning or review |
 
@@ -186,36 +197,28 @@ dispatch's fixed overhead, so noisy runs are not a reason to dispatch.
 
 ## Phases
 
-1. `preparing-projects` — detect project conventions (OpenSpec/SDD), index
-   with CodeGraph, check RTK, recover Engram checkpoints. Its report feeds
-   phase 2; the orchestrator saves the phase-transition checkpoint.
-2. `planning-changes` — produce source spec/plan, acceptance criteria,
-   risks, tests, tasks with dependencies.
-3. `implementing-tasks` — strict TDD per independent deliverable, parallelize
-   only independent tasks, apply Ponytail/YAGNI.
-4. `verifying-changes` — run repo checks and acceptance/spec conformance;
-   for user-flow criteria, use an existing repo E2E test if one covers it,
-   otherwise run Playwright MCP for that criterion regardless of
-   unit/integration coverage (unit/integration don't substitute for E2E on
-   a user-flow criterion); critical failures return to `implementing-tasks`.
-5. Spec reconciliation (inside verify) — compare source spec/plan, diff,
-   tests, and E2E evidence; for an accepted behavior/design change, update
-   the source spec artifact on the same branch and persist the decision in
-   Engram before repeating conformance. Never edit specs merely to justify
-   divergent code. Internal refactors touch docs only if a technical claim
-   is now false.
-6. `reviewing-changes` — fresh-context reviews (correctness, simplicity,
-   design, conventions, security when a trust boundary is touched);
-   critical findings return to `implementing-tasks`.
-7. `opening-pull-requests` — enforce small PRs, English title/body/docs, `show-me`
-   only when a visual materially helps, open a **draft PR** once gates pass.
+The orchestrator runs every phase, in this order, and reads each phase's
+fixed-shape output rather than re-deriving it.
+
+| # | Skill | Output the orchestrator reads |
+|---|-------|-------------------------------|
+| 1 | `preparing-projects` | `## Project prepared` report |
+| 2 | `planning-changes` | `## Change planned` report, `Artifact:` paths |
+| 3 | `implementing-tasks` | `## Tasks implemented` per-task report |
+| 4 | `verifying-changes` | `Verdict: PASS \| FAIL \| BLOCKED` (includes spec reconciliation) |
+| 5 | `reviewing-changes` | `Verdict: PASS \| FAIL`, per-lens findings |
+| 6 | `opening-pull-requests` | `## Pull requests` per-PR result |
+
+A `FAIL` at 4 or 5 routes back to 3 with the failure named, until both
+pass. `BLOCKED` at 4 stops the run for the operator. Step 6 runs only
+after both verdicts are `PASS`.
 
 ## Commits
 
-Every commit made during this workflow (any phase) uses Conventional
-Commits format (`feat:`, `fix:`, `docs:`, `chore:`, ...) and carries no
-AI/model attribution — no `Co-Authored-By` or similar trailer naming the
-agent or model. Commits read as the human operator's own work.
+Every commit made during a run uses Conventional Commits format (`feat:`,
+`fix:`, `docs:`, `chore:`, ...) and carries no AI/model attribution: no
+`Co-Authored-By` or similar trailer naming the agent or model. Commits read
+as the human operator's own work.
 
 ## Engram checkpoints
 

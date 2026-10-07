@@ -59,7 +59,7 @@ bash "$REPO_SCRIPTS/mcp/sync-mcp.sh"
 
 echo ""
 
-# 4b. Pinned agents: delivery-workflow's tiers.json becomes one pinned
+# 4b. Pinned agents: delivering-changes' tiers.json becomes one pinned
 # subagent per (tier, effort) pair, for every installed CLI. None of them
 # accept a model or effort argument on an ad-hoc dispatch, so a predefined
 # agent is the only channel that pins either.

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Generates one pinned OpenCode subagent per (tier, effort) pair in
-# skills/delivery-workflow/tiers.json, under ~/.config/opencode/agents/.
+# skills/delivering-changes/tiers.json, under ~/.config/opencode/agents/.
 #
 # OpenCode's task tool has no per-call model override (params.model isn't
 # wired yet) — a subagent always inherits its agent's configured model, or
@@ -80,7 +80,7 @@ if [ "${#unpinned[@]}" -gt 0 ]; then
   echo "    These agents pin the model only. They inherit the parent session's"
   echo "    effort, so a tier's effort split is advisory under OpenCode."
   echo "    To pin it, add a per-effort \"variants\" map to that tier's first"
-  echo "    opencode candidate in skills/delivery-workflow/tiers.json, using"
+  echo "    opencode candidate in skills/delivering-changes/tiers.json, using"
   echo "    the variant names the pinned model actually accepts, then re-run."
 fi
 
