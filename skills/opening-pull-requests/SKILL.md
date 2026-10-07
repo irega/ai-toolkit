@@ -20,8 +20,8 @@ Do not ask again.
 
 Split by independent concern. Use the plan's task list when one is
 available, for example a plan with tasks and dependencies. Otherwise judge
-from the diff. An unrelated bundle (a README tweak plus an unrelated script)
-is not one PR because it sits in one commit or branch. Recommend an
+from the diff. Unrelated changes (a README tweak and an unrelated script)
+get separate PRs, even when they share one commit or branch. Recommend an
 integration branch, with each small PR targeting it, only when several small
 PRs serve one larger effort.
 
