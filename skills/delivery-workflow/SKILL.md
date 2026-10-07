@@ -11,9 +11,9 @@ restate them). Run orchestration decisions at the `high_reasoning` tier.
 
 This skill owns sequencing and the gates between phases. It does not
 restate any phase's internal rules — `preparing-projects`, `planning-changes`,
-`implementing-tasks`, `delivery-verify`, and `delivery-pr` each already
-carry their own tested rules; invoke them and enforce what happens between
-them.
+`implementing-tasks`, `delivery-verify`, `reviewing-changes`, and
+`delivery-pr` each already carry their own tested rules; invoke them and
+enforce what happens between them.
 
 **Run `preparing-projects` inline** — it's a few detection commands, cheaper
 than a dispatch's fixed overhead (see contract.md's "Dispatch cost").
@@ -35,14 +35,14 @@ after a blocker."
 ## Run every phase, every time — size changes effort, never which phases run
 
 `preparing-projects` → `planning-changes` → `implementing-tasks` →
-`delivery-verify` → `delivery-pr`, in order, for every request this skill
-handles — including ones that look tiny.
+`delivery-verify` → `reviewing-changes` → `delivery-pr`, in order, for
+every request this skill handles — including ones that look tiny.
 
 **No exceptions:**
 - "This is tiny, skip the ceremony" doesn't drop a phase. A one-file change
-  still goes through discovery (even a two-line artifact) and verify (even
-  a fast fresh-context pass) — those phases scale down in effort, they
-  don't disappear.
+  still goes through discovery (even a two-line artifact), verify, and
+  review (even one combined fresh-context pass) — those phases scale down
+  in effort, they don't disappear.
 - The user asking to skip phases doesn't authorize it either — say so and
   explain what's lost (no acceptance criteria to check against, no
   fresh-context review, no gate before the PR opens) instead of complying.
@@ -56,18 +56,25 @@ handles — including ones that look tiny.
 **Red flags — you're about to violate this:**
 - Writing implementation code before `planning-changes` produced an
   artifact.
-- Opening a PR without having run `delivery-verify` on this diff.
+- Opening a PR without having run `delivery-verify` and
+  `reviewing-changes` on this diff.
 - Any PR you're about to open targets `main`/`master` directly instead of
   the integration branch this run is stacked on (see contract.md).
 
-## The gate between delivery-verify and delivery-pr
+## The gates between delivery-verify, reviewing-changes, and delivery-pr
 
 `delivery-verify` returns one of two things: conformance holds (proceed to
-`delivery-pr`), or a critical failure (route back to `implementing-tasks`
-with the specific failure named — per `delivery-verify`'s own rules, do not
-patch it here in the orchestrator and do not forward it to `delivery-pr`).
-Loop `implementing-tasks` → `delivery-verify` until conformance holds
-before ever invoking `delivery-pr`.
+`reviewing-changes`), or a critical failure (route back to
+`implementing-tasks` with the specific failure named — per
+`delivery-verify`'s own rules, do not patch it here in the orchestrator and
+do not forward it).
+
+`reviewing-changes` returns `Verdict: PASS` (proceed to `delivery-pr`) or
+`Verdict: FAIL` (route its critical findings back to `implementing-tasks`
+the same way). Non-critical findings go into the PR body as follow-ups.
+
+Loop `implementing-tasks` → `delivery-verify` → `reviewing-changes` until
+both pass before ever invoking `delivery-pr`.
 
 ## State and continuity
 
@@ -75,4 +82,4 @@ Track which phase is active and the artifacts each phase produced — a
 different agent resuming this run needs that from Engram checkpoints, not
 from re-deriving it. Persist a checkpoint at every phase transition and
 every gate decision (per `references/contract.md`), including a loop back
-from `delivery-verify` to `implementing-tasks`.
+from `delivery-verify` or `reviewing-changes` to `implementing-tasks`.
