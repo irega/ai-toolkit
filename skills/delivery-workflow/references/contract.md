@@ -21,10 +21,11 @@ operator, not something any skill can pick or verify.
 | `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `planning-changes` | Inline (brainstorming needs to talk to the human) | No — advisory only |
 | `implementing-tasks` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
-| `delivery-verify` | Dispatched per step, per its own Steps 1-3 | Yes, bounded (see below) |
+| `delivery-verify` | Dispatched per step, per its own Steps 1-2 | Yes, bounded (see below) |
+| `reviewing-changes` | Dispatched, one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
 | `delivery-pr` | Dispatched as a subagent by the orchestrator | Yes |
 
-**Never inline, not even after a blocker.** For the three dispatchable
+**Never inline, not even after a blocker.** For the four dispatchable
 phases, the orchestrator dispatches a subagent and stays out of that
 phase's actual work — diagnosing a failure, drafting the PR body, running
 the push, resolving an auth/tooling blocker. Hitting a blocker mid-phase
@@ -37,10 +38,10 @@ context after one blocked dispatch attempt is the same fail-open failure
 this section exists to prevent, whether the excuse is a missing config
 file or "I already had the context loaded, easier to finish it myself."
 
-For the three dispatchable phases, the orchestrator (or the phase itself, for
-implement/verify's internal fan-out) picks one candidate compatible with the
-current runtime uniformly at random from that tier's list (a tier/runtime
-with a single candidate always picks that one).
+For the four dispatchable phases, the orchestrator (or the phase itself, for
+implement/verify/review's internal fan-out) picks one candidate compatible
+with the current runtime uniformly at random from that tier's list (a
+tier/runtime with a single candidate always picks that one).
 
 If the chosen candidate errors at call time (rate limit, no credit,
 unavailable), retry with another candidate in the same tier's list for that
@@ -140,16 +141,17 @@ behaviour this file asks for everywhere else, not a silent pass.
 
 ## Interaction with subagent-driven-development
 
-`implementing-tasks` and `delivery-verify` dispatch subagents for individual
-tasks and reviews. Don't re-implement model selection for those dispatches —
+`implementing-tasks`, `delivery-verify`, and `reviewing-changes` dispatch
+subagents for individual tasks, checks, and reviews. Don't re-implement
+model selection for those dispatches —
 `superpowers:subagent-driven-development`'s own Model Selection section
 already picks a model per task by complexity, and its "always specify the
 model explicitly" rule already gives the same fail-closed guarantee this
 file asks for elsewhere.
 
 The two systems compose, they don't compete: this file's tier
-(`standard` for implement, mixed per-step for verify) sets the **pool** of
-candidates that phase may draw from; `subagent-driven-development`'s
+(`standard` for implement and review, mixed per-step for verify) sets the
+**pool** of candidates that phase may draw from; `subagent-driven-development`'s
 complexity heuristic picks **which candidate in that pool**, and decides
 when to escalate within it (e.g. fix-loop rounds 4-5). Neither system picks
 a model outside the tier's candidate list for that phase.
@@ -172,7 +174,7 @@ independent review).
   applying verdicts that already exist costs less inline than dispatched.
   The phase skills name which steps run inline.
 - **A small diff gets one review pass, not a fan-out.** See
-  `delivery-verify` Step 2 for the threshold.
+  `reviewing-changes` Step 2 for the threshold.
 
 **Noisy output, easy judgment.** Test suites, builds, linters, and E2E
 runs print large logs whose interpretation is trivial (pass or fail, which
@@ -192,19 +194,20 @@ dispatch's fixed overhead, so noisy runs are not a reason to dispatch.
 3. `implementing-tasks` — strict TDD per independent deliverable, parallelize
    only independent tasks, apply Ponytail/YAGNI.
 4. `delivery-verify` — run repo checks and acceptance/spec conformance;
-   fresh-context reviews (correctness, simplicity, design, conventions,
-   security when relevant); for user-flow criteria, use an existing repo
-   E2E test if one covers it, otherwise run Playwright MCP for that
-   criterion regardless of unit/integration coverage (unit/integration
-   don't substitute for E2E on a user-flow criterion); critical failures
-   return to `implementing-tasks`.
+   for user-flow criteria, use an existing repo E2E test if one covers it,
+   otherwise run Playwright MCP for that criterion regardless of
+   unit/integration coverage (unit/integration don't substitute for E2E on
+   a user-flow criterion); critical failures return to `implementing-tasks`.
 5. Spec reconciliation (inside verify) — compare source spec/plan, diff,
    tests, and E2E evidence; for an accepted behavior/design change, update
    the source spec artifact on the same branch and persist the decision in
    Engram before repeating conformance. Never edit specs merely to justify
    divergent code. Internal refactors touch docs only if a technical claim
    is now false.
-6. `delivery-pr` — enforce small PRs, English title/body/docs, `show-me`
+6. `reviewing-changes` — fresh-context reviews (correctness, simplicity,
+   design, conventions, security when a trust boundary is touched);
+   critical findings return to `implementing-tasks`.
+7. `delivery-pr` — enforce small PRs, English title/body/docs, `show-me`
    only when a visual materially helps, open a **draft PR** once gates pass.
 
 ## Commits
