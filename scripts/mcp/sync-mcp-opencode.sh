@@ -14,16 +14,17 @@ DEST="$HOME/.config/opencode/opencode.json"
 command -v jq &>/dev/null || { echo "ERROR: jq required. Install: brew install jq"; exit 1; }
 command -v opencode &>/dev/null || { echo "ERROR: 'opencode' CLI not found"; exit 1; }
 [ -f "$SRC" ] || { echo "ERROR: $SRC not found"; exit 1; }
+SERVERS=$(bash "$REPO/scripts/mcp/expand-servers.sh" "$SRC" "$ENV_LOCAL")
 [ -f "$DEST" ] || { mkdir -p "$(dirname "$DEST")"; echo '{}' > "$DEST"; }
 
 fragment="{}"
-for i in $(jq -r '.servers | keys[]' "$SRC"); do
-  name=$(jq -r ".servers[$i].name" "$SRC")
-  type=$(jq -r ".servers[$i].type" "$SRC")
-  command_bin=$(jq -r ".servers[$i].command // empty" "$SRC")
-  args_json=$(jq -c ".servers[$i].args // []" "$SRC")
-  url=$(jq -r ".servers[$i].url // empty" "$SRC")
-  env_keys=$(jq -r ".servers[$i].envKeys[]? // empty" "$SRC")
+for i in $(jq -r '.servers | keys[]' <<< "$SERVERS"); do
+  name=$(jq -r ".servers[$i].name" <<< "$SERVERS")
+  type=$(jq -r ".servers[$i].type" <<< "$SERVERS")
+  command_bin=$(jq -r ".servers[$i].command // empty" <<< "$SERVERS")
+  args_json=$(jq -c ".servers[$i].args // []" <<< "$SERVERS")
+  url=$(jq -r ".servers[$i].url // empty" <<< "$SERVERS")
+  env_keys=$(jq -r ".servers[$i].envKeys[]? // empty" <<< "$SERVERS")
 
   env_json="{}"
   if [ -f "$ENV_LOCAL" ] && [ -n "$env_keys" ]; then
@@ -50,5 +51,8 @@ BACKUP="$DEST.backup.$(date +%Y%m%d-%H%M%S)"
 cp "$DEST" "$BACKUP"
 echo "Backed up existing opencode.json to $BACKUP"
 
-jq --argjson mcp "$fragment" '.mcp = ((.mcp // {}) + $mcp)' "$DEST" > "$DEST.tmp" && mv "$DEST.tmp" "$DEST"
+jq --argjson mcp "$fragment" \
+  --argjson desired_azure "$(jq -c '[keys[] | select(startswith("azure-devops-"))]' <<< "$fragment")" \
+  '.mcp = (((.mcp // {}) | with_entries(.key as $name | select(($name | startswith("azure-devops-") | not) or ($desired_azure | index($name) != null)))) + $mcp)' \
+  "$DEST" > "$DEST.tmp" && mv "$DEST.tmp" "$DEST"
 echo "Synced opencode.json mcp key ($DEST) (existing unmanaged servers preserved)"

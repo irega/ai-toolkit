@@ -59,6 +59,7 @@ each installed CLI natively (eg: `claude mcp add`).
 | Server | Purpose |
 |--------|---------|
 | [playwright](https://github.com/microsoft/playwright-mcp) | Browser automation (Chrome extension mode) |
+| [Azure DevOps](https://github.com/microsoft/azure-devops-mcp) | Backlog, work items and pull requests (optional, one instance per configured organization) |
 
 Some servers may need env vars (e.g. an extension token). Copy `.env.example` to
 `.env.local` and fill it in before running `scripts/mcp/sync-mcp.sh` — values
