@@ -8,7 +8,6 @@ not link here.
 
 - Capability tiers
 - Pinned agents: the only channel for effort
-- Interaction with subagent-driven-development
 - Dispatch cost
 - Phases
 - Commits
@@ -20,6 +19,12 @@ Never hard-code a provider or model name inside a skill. Read tier candidates
 from `tiers.json` at the skill root — `skills/delivering-changes/tiers.json`,
 one level **above** this `references/` folder, not inside it.
 
+| Tier | Efforts | Used by |
+|------|---------|---------|
+| `high_reasoning` | high | Orchestrator (scope, routing, spec reconciliation), planning |
+| `standard` | low, medium | Implementation, fresh-context reviews |
+| `economy` | low | Opening PRs and other mechanical work — never substantive planning or review |
+
 **Which phases this applies to.** Only phases that actually get dispatched
 as a subagent can have their tier enforced — a tier assignment on a phase
 that runs inline, in whoever's context invoked it, is just a note to that
@@ -30,7 +35,7 @@ operator, not something any skill can pick or verify.
 | `delivering-changes` (orchestrator) | Inline, in the invoking session | No — the operator's session model is the ceiling; this is advisory only |
 | `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `planning-changes` | Inline (brainstorming needs to talk to the human) | No — advisory only |
-| `implementing-tasks` | Inline; fans out subagents per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
+| `implementing-tasks` | Inline; fans out subagents per its own Rule 2 | Yes, for those dispatches |
 | `verifying-changes` | Inline; dispatches Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and unclear criterion or reconciliation judgments (`high_reasoning`) | Yes, for those dispatches |
 | `reviewing-changes` | Inline; dispatches one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
 | `opening-pull-requests` | Dispatched as a subagent by the orchestrator (`economy` tier, `delivery-economy-low`) | Yes |
@@ -143,30 +148,6 @@ declares a `variants` map in `tiers.json`. Without one it pins the model,
 prints a warning naming every agent whose effort is unpinned, and that
 tier's effort split is advisory under OpenCode — which is the fail-loud
 behaviour this file asks for everywhere else, not a silent pass.
-
-## Interaction with subagent-driven-development
-
-`implementing-tasks`, `verifying-changes`, and `reviewing-changes` dispatch
-subagents for individual tasks, checks, and reviews. The orchestrator does
-not re-implement
-model selection for those dispatches —
-`superpowers:subagent-driven-development`'s own Model Selection section
-already picks a model per task by complexity, and its "always specify the
-model explicitly" rule already gives the same fail-closed guarantee this
-file asks for elsewhere.
-
-The two systems compose, they don't compete: this file's tier
-(`standard` for implementing and reviewing, mixed per dispatch for verifying) sets
-the **pool** of candidates that phase may draw from;
-`subagent-driven-development`'s complexity heuristic picks **which candidate in that pool**, and decides
-when to escalate within it (e.g. fix-loop rounds 4-5). Neither system picks
-a model outside the tier's candidate list for that phase.
-
-| Tier | Efforts | Used by |
-|------|---------|---------|
-| `high_reasoning` | high | Orchestrator (scope, routing, spec reconciliation), planning |
-| `standard` | low, medium | Implementation, fresh-context reviews |
-| `economy` | low | Mechanical/cheap checks only — never substantive planning or review |
 
 ## Dispatch cost
 

@@ -5,8 +5,7 @@ model: {{MODEL}}
 effort: {{EFFORT}}
 ---
 
-Follow the dispatching skill's instructions exactly (a skill dispatch, or a task brief from
-superpowers:subagent-driven-development).
+Follow the dispatching skill's instructions exactly.
 
 This agent exists only to pin the model and effort level for the
 "{{TIER}}" tier. It carries no rules of its own — do not infer extra scope
