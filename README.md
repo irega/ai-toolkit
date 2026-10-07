@@ -44,7 +44,7 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | [preparing-projects](skills/preparing-projects/SKILL.md) | Phase 1: detect spec conventions, index with CodeGraph, check RTK, recover Engram memory |
 | [planning-changes](skills/planning-changes/SKILL.md) | Plan a change: spec/plan with acceptance criteria, risks, tests, tasks |
 | [implementing-tasks](skills/implementing-tasks/SKILL.md) | Implement a plan: test-first per task, RED/GREEN report |
-| [delivery-verify](skills/delivery-verify/SKILL.md) | Phase 4: conformance checks, E2E evidence, spec reconciliation |
+| [verifying-changes](skills/verifying-changes/SKILL.md) | Verify a change against its spec: repo checks, evidence per criterion, E2E, spec drift |
 | [reviewing-changes](skills/reviewing-changes/SKILL.md) | Review a diff from fresh context, one verdict per lens, report only |
 | [delivery-pr](skills/delivery-pr/SKILL.md) | Phase 5: size and open the draft PR(s) |
 | [Humanizer](https://github.com/blader/humanizer) | Rewrite AI-sounding prose to read naturally, installed cross-agent via `npx skills add` |

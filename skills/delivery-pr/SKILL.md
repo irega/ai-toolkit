@@ -1,15 +1,15 @@
 ---
 name: delivery-pr
-description: Use when starting the final phase of the delivery workflow, right after delivery-verify's gates passed, to size and open the pull request.
+description: Use when starting the final phase of the delivery workflow, right after verifying-changes's gates passed, to size and open the pull request.
 ---
 
 # delivery-pr
 
 Final phase of the delivery workflow (see `../delivery-workflow/references/contract.md`
-for the full phase list). Only runs after `delivery-verify`'s gates passed.
+for the full phase list). Only runs after `verifying-changes`'s gates passed.
 The orchestrator dispatches this phase as a subagent at the `economy`
 tier — the heavy decisions (what's independent, whether it's ready) already
-happened in `planning-changes` and `delivery-verify`; this phase packages
+happened in `planning-changes` and `verifying-changes`; this phase packages
 that into PRs, it doesn't re-judge it. Opening the PR as a draft (Rule 1) is
 the safety gate — it's the authorization the human already gave by invoking
 `delivery-workflow`, so this phase doesn't need to check back in before
@@ -29,7 +29,7 @@ Once a PR's diff is ready, open it as a **draft PR** — never ready-for-review
 `gh pr create --draft ...`.
 
 **No exceptions:**
-- "It's tiny, already reviewed by delivery-verify" doesn't skip `--draft`.
+- "It's tiny, already reviewed by verifying-changes" doesn't skip `--draft`.
 - "In a hurry, just get it opened" doesn't bundle unrelated changes into
   one PR, and doesn't drop `--draft`.
 

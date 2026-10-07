@@ -21,7 +21,7 @@ operator, not something any skill can pick or verify.
 | `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `planning-changes` | Inline (brainstorming needs to talk to the human) | No — advisory only |
 | `implementing-tasks` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
-| `delivery-verify` | Dispatched per step, per its own Steps 1-2 | Yes, bounded (see below) |
+| `verifying-changes` | Inline, except Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and spec reconciliation or unclear criterion judgments (`high_reasoning`) | Yes, for those dispatches |
 | `reviewing-changes` | Dispatched, one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
 | `delivery-pr` | Dispatched as a subagent by the orchestrator | Yes |
 
@@ -141,7 +141,7 @@ behaviour this file asks for everywhere else, not a silent pass.
 
 ## Interaction with subagent-driven-development
 
-`implementing-tasks`, `delivery-verify`, and `reviewing-changes` dispatch
+`implementing-tasks`, `verifying-changes`, and `reviewing-changes` dispatch
 subagents for individual tasks, checks, and reviews. Don't re-implement
 model selection for those dispatches —
 `superpowers:subagent-driven-development`'s own Model Selection section
@@ -150,9 +150,9 @@ model explicitly" rule already gives the same fail-closed guarantee this
 file asks for elsewhere.
 
 The two systems compose, they don't compete: this file's tier
-(`standard` for implement and review, mixed per-step for verify) sets the
-**pool** of candidates that phase may draw from; `subagent-driven-development`'s
-complexity heuristic picks **which candidate in that pool**, and decides
+(`standard` for implement and review, mixed per dispatch for verify) sets
+the **pool** of candidates that phase may draw from;
+`subagent-driven-development`'s complexity heuristic picks **which candidate in that pool**, and decides
 when to escalate within it (e.g. fix-loop rounds 4-5). Neither system picks
 a model outside the tier's candidate list for that phase.
 
@@ -193,7 +193,7 @@ dispatch's fixed overhead, so noisy runs are not a reason to dispatch.
    risks, tests, tasks with dependencies.
 3. `implementing-tasks` — strict TDD per independent deliverable, parallelize
    only independent tasks, apply Ponytail/YAGNI.
-4. `delivery-verify` — run repo checks and acceptance/spec conformance;
+4. `verifying-changes` — run repo checks and acceptance/spec conformance;
    for user-flow criteria, use an existing repo E2E test if one covers it,
    otherwise run Playwright MCP for that criterion regardless of
    unit/integration coverage (unit/integration don't substitute for E2E on
