@@ -9,7 +9,8 @@ Input: a plan whose tasks have acceptance criteria and are marked
 independent or name what they depend on. No plan, or a task without
 acceptance criteria: stop and ask. Do not invent them.
 
-**REQUIRED BACKGROUND:** superpowers:test-driven-development.
+**Background:** superpowers:test-driven-development, when installed. Not
+installed: Rule 1 holds on its own; list it under `Degraded`.
 
 ```
 - [ ] 1. Order the tasks by their dependencies
@@ -54,8 +55,12 @@ other task in sequence here.
 Dispatch to the `delivery-standard-medium` agent if it exists (with
 `delivery-standard-medium--<model>` variants, pick one at random).
 Otherwise use a generic subagent, which inherits this session's model.
+Each subagent gets these rules and the skills this run uses.
 
 ## Rule 3: build only what the acceptance criteria ask for
+
+`ponytail` installed: invoke it before writing each task's code. Not
+installed: list it under `Degraded`. Either way, run this check.
 
 Before each GREEN, check every line you added against the acceptance
 criteria. A line is extra when no criterion or test needs it: a parameter,
@@ -81,4 +86,5 @@ free text. One `###` block per task, in the order run.
 - Suite: `<command>` -> pass | fail: <failing test names>
 - Not done: <task id>: <reason>, one per line | none
 - Dispatch: none | <agent name> | generic subagent (model unpinned)
+- Degraded: <skill>: <what changes because of it>, one per line | none
 ```
