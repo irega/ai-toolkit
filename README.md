@@ -76,6 +76,6 @@ get injected into the server registration.
 | `scripts/unlink-skills.sh` | Remove broken skill symlinks from all three skill directories |
 | `scripts/mcp/sync-mcp.sh` | Dispatcher: registers MCP servers from `configs/mcp-servers.json` into whichever of claude/codex/opencode are installed |
 | `scripts/mcp/sync-mcp-<assistant>.sh` | Register MCP servers with one specific assistant (`claude`, `codex`, or `opencode`) only |
-| `scripts/agents/sync-agents.sh` | Dispatcher: generates one pinned subagent per (tier, effort) pair in `skills/delivering-changes/tiers.json` for whichever of claude/codex/opencode are installed — no runtime accepts a model or effort argument on an ad-hoc dispatch, so a predefined agent is the only channel |
+| `scripts/agents/sync-agents.sh` | Dispatcher: generates one pinned subagent per (tier, effort) pair in `skills/delivering-changes/tiers.json` for whichever of claude/codex/opencode are installed (details: `scripts/agents/README.md`) |
 | `scripts/agents/sync-agents-<assistant>.sh` | Generate pinned subagents for one specific assistant (`claude`, `codex`, or `opencode`) only, rendered from `scripts/agents/templates/` |
 | `scripts/agents/prune-agents.sh` | Remove `delivery-*` pinned agents that current `tiers.json` would not generate — leftovers from a renamed/removed tier or an old naming scheme |
