@@ -58,11 +58,11 @@ invokes that skill directly, outside this workflow.
 | "It's trivial, skip planning" | Planning for a trivial change is a two-line artifact. Verification needs something to check against. |
 | "I ran it by hand, that is verification" | That is verification outside the gate. Run it inside. |
 | "The user told me to skip it" | Explain the trade-off and run it anyway. |
-| "The PR dispatch hit a blocker, I'll finish it here" | Never inline a dispatched phase. Retry with the blocker's context, or escalate. |
+| "The subagent hit a blocker, I'll finish it here" | Never inline a dispatch, the orchestrator's or a phase skill's. Retry with the blocker's context, or escalate. |
 
 **Red flags:** implementation code before an artifact exists; a PR opened
-before both verdicts are `PASS`; the orchestrator running a dispatched
-phase's commands itself.
+before both verdicts are `PASS`; this session doing the work of a blocked
+subagent.
 
 ## State
 

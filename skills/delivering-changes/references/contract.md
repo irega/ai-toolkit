@@ -35,18 +35,13 @@ operator, not something any skill can pick or verify.
 | `reviewing-changes` | Inline; dispatches one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
 | `opening-pull-requests` | Dispatched as a subagent by the orchestrator (`economy` tier, `delivery-economy-low`) | Yes |
 
-**Never inline, not even after a blocker.** For a phase the orchestrator
-dispatches (`opening-pull-requests`), it stays out of that
-phase's actual work — diagnosing a failure, drafting the PR body, running
-the push, resolving an auth/tooling blocker. Hitting a blocker mid-phase
-(e.g. `gh`/host-CLI auth failure) is not authorization to take the rest of
-the phase over inline: retry the dispatch with the blocker's context added,
-or re-dispatch a fresh subagent past the blocker, or escalate to the
-operator per that phase's own degrade rule (`opening-pull-requests`'s Rule 5, for
-example). Silently continuing step-by-step in the orchestrator's own
-context after one blocked dispatch attempt is the same fail-open failure
-this section exists to prevent, whether the excuse is a missing config
-file or "I already had the context loaded, easier to finish it myself."
+**Never inline a dispatch, not even after a blocker.** This applies to
+every dispatch in a run, whether the orchestrator or a phase skill made it.
+A blocked subagent (auth failure, missing CLI, rate limit) does not
+authorize finishing its work in this session. Retry it with the blocker's
+context, or dispatch a fresh subagent, or apply the skill's own degrade
+rule, or escalate to the operator. Finishing it here in silence breaks the
+tier and is the fail-open failure this contract forbids.
 
 For dispatched work, the orchestrator (or the phase skill itself, for
 implementing, verifying, and reviewing's internal fan-out) picks one candidate compatible
