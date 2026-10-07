@@ -12,13 +12,15 @@ Never redo a phase's work here. Orchestration decisions run at the
 `high_reasoning` tier. Tiers, dispatch rules, and checkpoints:
 `references/contract.md`.
 
+Per phase: invoke the skill, write its output, save a checkpoint.
+
 ```
-- [ ] 1. preparing-projects   -> read its report
-- [ ] 2. planning-changes     -> read the artifact path
-- [ ] 3. implementing-tasks   -> read the per-task report
-- [ ] 4. verifying-changes    -> Verdict: PASS | FAIL | BLOCKED
-- [ ] 5. reviewing-changes    -> Verdict: PASS | FAIL
-- [ ] 6. opening-pull-requests -> read the per-PR result
+- [ ] 1. preparing-projects    -> ## Project prepared       -> mem_save
+- [ ] 2. planning-changes      -> ## Change planned         -> mem_save
+- [ ] 3. implementing-tasks    -> ## Tasks implemented      -> mem_save
+- [ ] 4. verifying-changes     -> ## Verification, Verdict: -> mem_save
+- [ ] 5. reviewing-changes     -> ## Review, Verdict:       -> mem_save
+- [ ] 6. opening-pull-requests -> ## Pull requests          -> mem_save
 ```
 
 ## Phases
@@ -28,12 +30,15 @@ commands. Step 2 talks to the user. Steps 3 to 5 decide their own
 dispatches. Follow each skill's rules and do not wrap it in another
 dispatch. **Dispatch step 6** to `delivery-economy-low`
 if it exists (`--<model>` variants: pick one at random), else a generic
-subagent, and record which one ran. Pass each phase what it needs: the
-report or artifact path from the previous one.
+subagent, and record which one ran. The dispatch prompt passes context
+only: the branch, the plan path, the verdicts, the follow-ups. Never add
+commit message, trailer, or attribution instructions. The skill owns them.
 
-Read each phase's fixed-shape output (`## Project prepared`,
-`## Change planned` with `Artifact:`, `## Tasks implemented`,
-`Verdict:`, `## Pull requests`). Do not re-derive it from the repo.
+A phase is done only when its fixed-shape output is written in the
+conversation, in the skill's exact shape. A phase run inline still writes
+it. No output, no next phase. Pass the next phase what it needs from that
+output: the report or the `Artifact:` paths. Do not re-derive it from the
+repo.
 
 ## Gates
 
@@ -43,6 +48,8 @@ Read each phase's fixed-shape output (`## Project prepared`,
 - `reviewing-changes` `FAIL`: route its critical findings to
   `implementing-tasks` the same way. Non-critical findings go into the PR
   body as follow-ups.
+- A gate reads the `Verdict:` line. No line means the phase is not done:
+  finish it, never infer the verdict from checks that passed.
 - Loop 3, 4, 5 until both verdicts are `PASS`. Only then run step 6.
 
 ## Run every phase, every time
@@ -60,12 +67,16 @@ invokes that skill directly, outside this workflow.
 | "The user told me to skip it" | Explain the trade-off and run it anyway. |
 | "The subagent hit a blocker, I'll finish it here" | Never inline a dispatch, the orchestrator's or a phase skill's. Retry with the blocker's context, or escalate. |
 
-**Red flags:** implementation code before an artifact exists; a PR opened
-before both verdicts are `PASS`; this session doing the work of a blocked
-subagent.
+**Red flags:** implementation code before an artifact exists; a next phase
+started before the previous one wrote its output; a PR opened before both
+`Verdict:` lines say `PASS`; this session doing the work of a blocked
+subagent; commit or attribution instructions in a dispatch prompt.
 
 ## State
 
-Save an Engram checkpoint at every phase transition and gate decision,
-including each loop back to implementation. Record which agent ran each
-dispatch. Another agent must resume from memory plus artifacts.
+After each phase output and each gate decision, including each loop back
+to implementation, call the Engram MCP tool `mem_save`. Title it
+`Delivery <phase>: <change>`. The content holds the phase output's key
+lines, the artifact paths, and which agent ran each dispatch. Another
+agent must resume from memory plus artifacts. Engram unavailable: say so
+once and continue.
