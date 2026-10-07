@@ -90,8 +90,9 @@ subagent) and keep its answer.
 ## Rule: report, never fix
 
 Copy findings as the passes returned them: none dropped, softened, or
-added. A `path:line` reported by several passes stays once, under the
-first lens in the table. Edit no code, even for a one-line fix.
+added. The same problem reported by several passes stays once, under the
+lens whose "Looks for" covers it. Different problems on one line stay
+apart. Edit no code, even for a one-line fix.
 
 | Excuse | Reality |
 |---|---|
