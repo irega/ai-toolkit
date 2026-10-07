@@ -12,12 +12,12 @@ restate them). Run orchestration decisions at the `high_reasoning` tier.
 This skill owns sequencing and the gates between phases. It does not
 restate any phase's internal rules — `preparing-projects`, `planning-changes`,
 `implementing-tasks`, `verifying-changes`, `reviewing-changes`, and
-`delivery-pr` each already carry their own tested rules; invoke them and
+`opening-pull-requests` each already carry their own tested rules; invoke them and
 enforce what happens between them.
 
 **Run `preparing-projects` inline** — it's a few detection commands, cheaper
 than a dispatch's fixed overhead (see contract.md's "Dispatch cost").
-**Dispatch `delivery-pr` as a subagent** at the tier its `SKILL.md`
+**Dispatch `opening-pull-requests` as a subagent** at the tier its `SKILL.md`
 declares (`economy`) — packaging is mechanical, with no need for this
 session's own model. Run `planning-changes` inline — it needs to talk to
 the human directly, a subagent can't relay that without adding a
@@ -25,7 +25,7 @@ round-trip. See `references/contract.md`'s Capability tiers section for
 the fail-closed rule and the per-runtime dispatch mechanism (pinned
 OpenCode agents, explicit model param elsewhere) before dispatching.
 
-A blocker inside `delivery-pr` (tool auth failure,
+A blocker inside `opening-pull-requests` (tool auth failure,
 missing CLI, etc.) is never a reason to keep going yourself, step by step,
 in this orchestrating context — retry the dispatch with the blocker's
 context added, re-dispatch fresh past it, or escalate to the operator per
@@ -35,7 +35,7 @@ after a blocker."
 ## Run every phase, every time — size changes effort, never which phases run
 
 `preparing-projects` → `planning-changes` → `implementing-tasks` →
-`verifying-changes` → `reviewing-changes` → `delivery-pr`, in order, for
+`verifying-changes` → `reviewing-changes` → `opening-pull-requests`, in order, for
 every request this skill handles — including ones that look tiny.
 
 **No exceptions:**
@@ -61,7 +61,7 @@ every request this skill handles — including ones that look tiny.
 - Any PR you're about to open targets `main`/`master` directly instead of
   the integration branch this run is stacked on (see contract.md).
 
-## The gates between verifying-changes, reviewing-changes, and delivery-pr
+## The gates between verifying-changes, reviewing-changes, and opening-pull-requests
 
 `verifying-changes` returns `Verdict: PASS` (proceed to
 `reviewing-changes`), `Verdict: FAIL` (route back to `implementing-tasks`
@@ -69,12 +69,12 @@ with each failure named — do not patch it here in the orchestrator and do
 not forward it), or `Verdict: BLOCKED` (evidence is missing, e.g. no
 Playwright MCP — stop and ask the operator).
 
-`reviewing-changes` returns `Verdict: PASS` (proceed to `delivery-pr`) or
+`reviewing-changes` returns `Verdict: PASS` (proceed to `opening-pull-requests`) or
 `Verdict: FAIL` (route its critical findings back to `implementing-tasks`
 the same way). Non-critical findings go into the PR body as follow-ups.
 
 Loop `implementing-tasks` → `verifying-changes` → `reviewing-changes` until
-both pass before ever invoking `delivery-pr`.
+both pass before ever invoking `opening-pull-requests`.
 
 ## State and continuity
 

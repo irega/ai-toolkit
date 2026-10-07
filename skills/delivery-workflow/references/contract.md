@@ -23,7 +23,7 @@ operator, not something any skill can pick or verify.
 | `implementing-tasks` | Dispatched per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
 | `verifying-changes` | Inline, except Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and spec reconciliation or unclear criterion judgments (`high_reasoning`) | Yes, for those dispatches |
 | `reviewing-changes` | Dispatched, one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
-| `delivery-pr` | Dispatched as a subagent by the orchestrator | Yes |
+| `opening-pull-requests` | Dispatched as a subagent by the orchestrator | Yes |
 
 **Never inline, not even after a blocker.** For the four dispatchable
 phases, the orchestrator dispatches a subagent and stays out of that
@@ -32,7 +32,7 @@ the push, resolving an auth/tooling blocker. Hitting a blocker mid-phase
 (e.g. `gh`/host-CLI auth failure) is not authorization to take the rest of
 the phase over inline: retry the dispatch with the blocker's context added,
 or re-dispatch a fresh subagent past the blocker, or escalate to the
-operator per that phase's own degrade rule (`delivery-pr`'s Rule 5, for
+operator per that phase's own degrade rule (`opening-pull-requests`'s Rule 5, for
 example). Silently continuing step-by-step in the orchestrator's own
 context after one blocked dispatch attempt is the same fail-open failure
 this section exists to prevent, whether the excuse is a missing config
@@ -207,7 +207,7 @@ dispatch's fixed overhead, so noisy runs are not a reason to dispatch.
 6. `reviewing-changes` — fresh-context reviews (correctness, simplicity,
    design, conventions, security when a trust boundary is touched);
    critical findings return to `implementing-tasks`.
-7. `delivery-pr` — enforce small PRs, English title/body/docs, `show-me`
+7. `opening-pull-requests` — enforce small PRs, English title/body/docs, `show-me`
    only when a visual materially helps, open a **draft PR** once gates pass.
 
 ## Commits
