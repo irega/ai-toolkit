@@ -61,8 +61,9 @@ For each criterion that describes a user-facing flow:
 2. No E2E covers it: drive the flow with Playwright MCP, even when unit
    tests pass. They do not prove the flow. Snapshots are noisy, so dispatch
    this to `delivery-standard-medium` if it exists (see Dispatch below).
-3. Playwright MCP unavailable or failing: `missing evidence`, and the
-   criterion is `unverified`. Never claim a pass.
+3. Playwright MCP unavailable: `missing evidence`, and the criterion is
+   `unverified`. Unavailable means a tool call failed or no Playwright MCP
+   tool exists; make the call before saying so. Never claim a pass.
 
 Other criteria never need E2E. Report results, not snapshots.
 
