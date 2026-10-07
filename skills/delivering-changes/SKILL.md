@@ -34,9 +34,10 @@ subagent, and record which one ran. The dispatch prompt passes context
 only: the branch, the plan path, the verdicts, the follow-ups. Never add
 commit message, trailer, or attribution instructions. The skill owns them.
 
-A phase is done only when its fixed-shape output is written in the
-conversation, in the skill's exact shape. A phase run inline still writes
-it. No output, no next phase. Pass the next phase what it needs from that
+A phase is done only when its fixed-shape output is written as a chat
+message, in the skill's exact shape, before the next skill call. A phase
+run inline still writes it. A `mem_save`, a passing command, or a summary
+is not the output. No output, no next phase. Pass the next phase what it needs from that
 output: the report or the `Artifact:` paths. Do not re-derive it from the
 repo.
 
@@ -65,6 +66,7 @@ invokes that skill directly, outside this workflow.
 | "It's trivial, skip planning" | Planning for a trivial change is a two-line artifact. Verification needs something to check against. |
 | "I ran it by hand, that is verification" | That is verification outside the gate. Run it inside. |
 | "The user told me to skip it" | Explain the trade-off and run it anyway. |
+| "The phase clearly passed, the report is a formality" | The report is the gate's input and the user's record. Write it. |
 | "The subagent hit a blocker, I'll finish it here" | Never inline a dispatch, the orchestrator's or a phase skill's. Retry with the blocker's context, or escalate. |
 
 **Red flags:** implementation code before an artifact exists; a next phase
