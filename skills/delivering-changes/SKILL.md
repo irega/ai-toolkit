@@ -24,8 +24,9 @@ Never redo a phase's work here. Orchestration decisions run at the
 ## Phases
 
 Run steps 1 to 5 in this session, not as subagents. Step 1 is a few
-commands. Step 2 talks to the user. Steps 3 to 5 dispatch their own
-subagents, so a dispatch around them only adds overhead. **Dispatch step 6** to `delivery-economy-low`
+commands. Step 2 talks to the user. Steps 3 to 5 decide their own
+dispatches. Follow each skill's rules and do not wrap it in another
+dispatch. **Dispatch step 6** to `delivery-economy-low`
 if it exists (`--<model>` variants: pick one at random), else a generic
 subagent, and record which one ran. Pass each phase what it needs: the
 report or artifact path from the previous one.

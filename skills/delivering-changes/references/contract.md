@@ -31,7 +31,7 @@ operator, not something any skill can pick or verify.
 | `preparing-projects` | Inline (a few detection commands — cheaper than a dispatch's fixed overhead) | No — advisory only |
 | `planning-changes` | Inline (brainstorming needs to talk to the human) | No — advisory only |
 | `implementing-tasks` | Inline; fans out subagents per its own Rule 2 | Yes, bounded (see "Interaction with subagent-driven-development" below) |
-| `verifying-changes` | Inline; dispatches Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and spec reconciliation or unclear criterion judgments (`high_reasoning`) | Yes, for those dispatches |
+| `verifying-changes` | Inline; dispatches Playwright MCP runs (`standard` tier, `delivery-standard-medium`) and unclear criterion or reconciliation judgments (`high_reasoning`) | Yes, for those dispatches |
 | `reviewing-changes` | Inline; dispatches one fresh-context pass per lens or one combined pass (`standard` tier) | Yes |
 | `opening-pull-requests` | Dispatched as a subagent by the orchestrator (`economy` tier, `delivery-economy-low`) | Yes |
 
