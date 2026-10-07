@@ -23,9 +23,9 @@ Never redo a phase's work here. Orchestration decisions run at the
 
 ## Phases
 
-Run 1 to 5 inline: each is cheap to invoke, and 2 talks to the user.
-`verifying-changes`, `reviewing-changes`, and `implementing-tasks`
-dispatch their own subagents. **Dispatch step 6** to `delivery-economy-low`
+Run steps 1 to 5 in this session, not as subagents. Step 1 is a few
+commands. Step 2 talks to the user. Steps 3 to 5 dispatch their own
+subagents, so a dispatch around them only adds overhead. **Dispatch step 6** to `delivery-economy-low`
 if it exists (`--<model>` variants: pick one at random), else a generic
 subagent, and record which one ran. Pass each phase what it needs: the
 report or artifact path from the previous one.
