@@ -45,8 +45,10 @@ not a trust boundary.
 | Conventions | `delivery-standard-low` | departures from the repo's written rules and surrounding style |
 
 **Use a dedicated skill when installed.** The Simplicity lens invokes
-`ponytail-review`; the Security pass invokes `security-review`. Missing
-skill: the pass uses the "Looks for" column. Either way the pass returns
+`ponytail-review`; the Security pass invokes `security-review`. Check
+which are installed before dispatching; a pass prompt names only those,
+as "Invoke `<skill>` first", never "if installed". Missing skill: the
+pass uses the "Looks for" column. Either way the pass returns
 the shape in Step 3, not the skill's own.
 
 **Under about 150 changed lines and no trust boundary:** one combined pass
@@ -71,7 +73,8 @@ Each pass prompt carries: how to get the diff, its lenses with their
 definition of critical below, "report only, do not edit any file",
 "report only findings of your lenses", and the return shape per lens:
 `PASS`, or one line per finding with `path:line`, severity, problem, and a
-one-line fix.
+one-line fix. The pass ends with `Skills: <invoked skills> | none`, which
+fills the `Dispatch` line.
 
 **Critical** means shipping it would cause a regression, a security hole,
 or an unmet acceptance criterion. Everything else is `non-critical`,
