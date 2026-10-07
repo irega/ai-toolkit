@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Generates one pinned Codex subagent per (tier, effort) pair in
-# skills/delivery-workflow/tiers.json, under ~/.codex/agents/.
+# skills/delivering-changes/tiers.json, under ~/.codex/agents/.
 #
 # Codex spawns subagents by name; reasoning effort is not an argument of that
 # call. A custom agent TOML file may carry `model_reasoning_effort`, and a

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Generates one pinned Claude Code subagent per (tier, effort) pair in
-# skills/delivery-workflow/tiers.json, under ~/.claude/agents/.
+# skills/delivering-changes/tiers.json, under ~/.claude/agents/.
 #
 # Claude Code's Agent tool takes subagent_type, model and prompt — it has no
 # effort parameter, and subagents otherwise inherit the session's effort
