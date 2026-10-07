@@ -34,10 +34,10 @@ subagent, and record which one ran. The dispatch prompt passes context
 only: the branch, the plan path, the verdicts, the follow-ups. Never add
 commit message, trailer, or attribution instructions. The skill owns them.
 
-A phase is done only when its fixed-shape output is written as a chat
-message, in the skill's exact shape, before the next skill call. A phase
-run inline still writes it. A `mem_save`, a passing command, or a summary
-is not the output. No output, no next phase. Pass the next phase what it needs from that
+A phase is done only when its fixed-shape output exists, in the skill's
+exact shape, inside that phase's `mem_save`. A phase run inline still
+produces it. A passing command or a summary is not the output. No output,
+no next phase. The final message repeats every phase output, in order. Pass the next phase what it needs from that
 output: the report or the `Artifact:` paths. Do not re-derive it from the
 repo.
 
@@ -49,8 +49,9 @@ repo.
 - `reviewing-changes` `FAIL`: route its critical findings to
   `implementing-tasks` the same way. Non-critical findings go into the PR
   body as follow-ups.
-- A gate reads the `Verdict:` line. No line means the phase is not done:
-  finish it, never infer the verdict from checks that passed.
+- A gate reads the `Verdict:` line in the phase output. No line means the
+  phase is not done: finish it, never infer the verdict from checks that
+  passed.
 - Loop 3, 4, 5 until both verdicts are `PASS`. Only then run step 6.
 
 ## Run every phase, every time
@@ -66,11 +67,11 @@ invokes that skill directly, outside this workflow.
 | "It's trivial, skip planning" | Planning for a trivial change is a two-line artifact. Verification needs something to check against. |
 | "I ran it by hand, that is verification" | That is verification outside the gate. Run it inside. |
 | "The user told me to skip it" | Explain the trade-off and run it anyway. |
-| "The phase clearly passed, the report is a formality" | The report is the gate's input and the user's record. Write it. |
+| "The phase clearly passed, the report is a formality" | The report is the gate's input and the user's record. Save it. |
 | "The subagent hit a blocker, I'll finish it here" | Never inline a dispatch, the orchestrator's or a phase skill's. Retry with the blocker's context, or escalate. |
 
 **Red flags:** implementation code before an artifact exists; a next phase
-started before the previous one wrote its output; a PR opened before both
+started before the previous one saved its output; a PR opened before both
 `Verdict:` lines say `PASS`; this session doing the work of a blocked
 subagent; commit or attribution instructions in a dispatch prompt.
 
@@ -78,7 +79,7 @@ subagent; commit or attribution instructions in a dispatch prompt.
 
 After each phase output and each gate decision, including each loop back
 to implementation, call the Engram MCP tool `mem_save`. Title it
-`Delivery <phase>: <change>`. The content holds the phase output's key
-lines, the artifact paths, and which agent ran each dispatch. Another
+`Delivery <phase>: <change>`. The content is the phase output, verbatim,
+plus which agent ran each dispatch. Another
 agent must resume from memory plus artifacts. Engram unavailable: say so
 once and continue.
