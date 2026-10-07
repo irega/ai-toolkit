@@ -37,10 +37,15 @@ SQL, or path construction, deserialization, or permissions.
 | Lens | Pinned agent | Looks for |
 |---|---|---|
 | Correctness | `delivery-standard-medium` | wrong logic, off-by-one, broken callers, unmet criteria |
-| Security | `delivery-standard-medium` | injection, auth bypass, unvalidated input, leaked secrets, unhandled failure (only when a trust boundary is touched) |
+| Security | `delivery-standard-medium` | the current OWASP Top 10: broken access control, injection, authentication and cryptographic failures, insecure design, misconfiguration, integrity failures (only when a trust boundary is touched) |
 | Simplicity | `delivery-standard-low` | code no criterion or caller needs: unused flags, parameters, abstractions |
 | Design | `delivery-standard-low` | coupling, duplication, wrong layer, unclear names |
 | Conventions | `delivery-standard-low` | departures from the repo's written rules and surrounding style |
+
+**Use a dedicated skill when installed.** The Simplicity lens invokes
+`ponytail-review`; the Security pass invokes `security-review`. Missing
+skill: the pass uses the "Looks for" column. Either way the pass returns
+the shape in Step 3, not the skill's own.
 
 **Under about 150 changed lines and no trust boundary:** one combined pass
 to `delivery-standard-medium` covering the four other lenses, with a
@@ -60,8 +65,9 @@ Never review in this context: it has already seen the code. Run passes in
 parallel when the runtime allows it.
 
 Each pass prompt carries: how to get the diff, its lenses with their
-"Looks for", the acceptance criteria if any, the definition of critical
-below, "report only, do not edit any file", and the return shape per lens:
+"Looks for" or the skill to invoke, the acceptance criteria if any, the
+definition of critical below, "report only, do not edit any file", and the
+return shape per lens:
 `PASS`, or one line per finding with `path:line`, severity, problem, and a
 one-line fix.
 
@@ -109,5 +115,5 @@ free text. `Verdict` is `FAIL` when any finding is critical.
 ### Conventions: PASS | FINDINGS
 
 - Verdict: PASS | FAIL
-- Dispatch: <combined | lens>: <agent name> | generic subagent (effort unpinned), one line per pass
+- Dispatch: <combined | lens>: <agent name> | generic subagent (effort unpinned); skill: <name> | none, one line per pass
 ```
