@@ -11,9 +11,10 @@ Do not ask again.
 ```
 - [ ] 1. Split the diff by independent concern
 - [ ] 2. Read the PR template and the title convention
-- [ ] 3. Pick the tool for the remote's host
-- [ ] 4. Open each PR as a draft, or write its fallback file
-- [ ] 5. Write the result
+- [ ] 3. Branch, commit, and push each concern
+- [ ] 4. Pick the tool for the remote's host
+- [ ] 5. Open each PR as a draft, or write its fallback file
+- [ ] 6. Write the result
 ```
 
 ## Rule 1: one PR per independent concern, always draft
@@ -24,6 +25,12 @@ from the diff. Unrelated changes (a README tweak and an unrelated script)
 get separate PRs, even when they share one commit or branch. Recommend an
 integration branch, with each small PR targeting it, only when several small
 PRs serve one larger effort.
+
+Each PR needs its own branch, committed and pushed. Work that is
+uncommitted or on the default branch: create one branch per concern,
+commit with the convention in Rule 5, and push. Then open the PR or write
+its fallback file. A fallback file for work left uncommitted is a dropped
+PR.
 
 Open every PR as a **draft**, whatever its size or how sure you are:
 `gh pr create --draft ...`.
