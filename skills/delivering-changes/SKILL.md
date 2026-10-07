@@ -5,14 +5,10 @@ description: Carries a change from request to draft pull requests as one orchest
 
 # Delivering changes
 
-Orchestrator. Owns sequencing, gates, routing, tiers, and Engram
-checkpoints. Each phase skill does its own work and returns a fixed-shape
-output. Invoke it, read that output, enforce what happens between phases.
-Never redo a phase's work here. Orchestration decisions run at the
-`high_reasoning` tier. Tiers, dispatch rules, and checkpoints:
+Orchestrator: owns sequencing, gates, tiers, and Engram checkpoints. Each
+phase skill does its own work and returns a fixed-shape output. Never redo
+a phase's work here. Tiers, dispatch rules, and checkpoints:
 `references/contract.md`.
-
-Per phase: invoke the skill, write its output, save a checkpoint.
 
 ```
 - [ ] 1. preparing-projects    -> ## Project prepared       -> mem_save
@@ -25,61 +21,51 @@ Per phase: invoke the skill, write its output, save a checkpoint.
 
 ## Phases
 
-Run steps 1 to 5 in this session, not as subagents. Step 1 is a few
-commands. Step 2 talks to the user. Steps 3 to 5 decide their own
-dispatches. Follow each skill's rules and do not wrap it in another
-dispatch. **Dispatch step 6** to `delivery-economy-low`
-if it exists (`--<model>` variants: pick one at random), else a generic
-subagent, and record which one ran. The dispatch prompt passes context
-only: the branch, the plan path, the verdicts, the follow-ups. Never add
-commit message, trailer, or attribution instructions. The skill owns them.
+Run steps 1 to 5 in this session: 2 talks to the user, 3 to 5 decide their
+own dispatches. **Dispatch step 6** to `delivery-economy-low` if it exists
+(`--<model>` variants: pick one at random), else a generic subagent. Its
+prompt passes context only (branch, plan path, verdicts, follow-ups),
+never commit or attribution instructions.
 
-A phase is done only when its fixed-shape output exists, in the skill's
-exact shape, inside that phase's `mem_save`. A phase run inline still
-produces it. A passing command or a summary is not the output. No output,
-no next phase. The final message repeats every phase output, in order. Pass the next phase what it needs from that
-output: the report or the `Artifact:` paths. Do not re-derive it from the
-repo.
+A phase is done when its output, in the skill's exact shape, is in its
+`mem_save`. A passing command or a summary is not the output. No output,
+no next phase. Pass the next phase the report or `Artifact:` paths from
+it; never re-derive them from the repo. The final message repeats every
+output, in order.
 
 ## Gates
 
-- `verifying-changes` `FAIL`: route to `implementing-tasks` with each
-  failure named. Never patch it here. `BLOCKED` (evidence missing): stop
-  and ask the operator.
-- `reviewing-changes` `FAIL`: route its critical findings to
-  `implementing-tasks` the same way. Non-critical findings go into the PR
-  body as follow-ups.
-- A gate reads the `Verdict:` line in the phase output. No line means the
-  phase is not done: finish it, never infer the verdict from checks that
-  passed.
-- Loop 3, 4, 5 until both verdicts are `PASS`. Only then run step 6.
+A gate reads the `Verdict:` line. No line: the phase is not done; never
+infer a verdict from passing checks.
 
-## Run every phase, every time
+- Verify `FAIL` or review `FAIL`: route each failure or critical finding
+  to `implementing-tasks`. Never patch it here.
+- Verify `BLOCKED`: stop and ask the operator.
+- Non-critical findings go into the PR body as follow-ups.
+- Loop 3 to 5 until both verdicts are `PASS`. Only then run step 6.
 
-Run all six phases for every request, including tiny ones. Size changes
-effort, never which phases run. A user request to skip a phase does not
-authorize it: say what is lost (no acceptance criteria to check, no fresh
-review, no gate before the PR) and run it. To use a single phase, the user
-invokes that skill directly, outside this workflow.
+## Every phase, every time
+
+Size changes effort, never which phases run. A request to skip a phase
+does not authorize it: say what is lost (acceptance criteria, fresh
+review, the gate before the PR) and run it. A single phase is run by
+invoking its skill directly, outside this workflow.
 
 | Excuse | Reality |
 |---|---|
-| "It's trivial, skip planning" | Planning for a trivial change is a two-line artifact. Verification needs something to check against. |
-| "I ran it by hand, that is verification" | That is verification outside the gate. Run it inside. |
-| "The user told me to skip it" | Explain the trade-off and run it anyway. |
-| "The phase clearly passed, the report is a formality" | The report is the gate's input and the user's record. Save it. |
-| "The subagent hit a blocker, I'll finish it here" | Never inline a dispatch, the orchestrator's or a phase skill's. Retry with the blocker's context, or escalate. |
+| "It's trivial, skip planning" | A trivial plan is two lines. Verification needs it. |
+| "I ran it by hand" | That is verification outside the gate. |
+| "The user told me to skip it" | Explain the trade-off, run it anyway. |
+| "The report is a formality" | It is the gate's input. Save it. |
+| "The subagent is blocked, I'll finish it" | Never inline a dispatch. Retry with the blocker's context, or escalate. |
 
-**Red flags:** implementation code before an artifact exists; a next phase
-started before the previous one saved its output; a PR opened before both
-`Verdict:` lines say `PASS`; this session doing the work of a blocked
-subagent; commit or attribution instructions in a dispatch prompt.
+**Red flags:** code before a plan artifact; a phase started before the
+previous one saved its output; a PR before both verdicts are `PASS`; this
+session doing a blocked subagent's work; attribution in a dispatch prompt.
 
 ## State
 
-After each phase output and each gate decision, including each loop back
-to implementation, call the Engram MCP tool `mem_save`. Title it
-`Delivery <phase>: <change>`. The content is the phase output, verbatim,
-plus which agent ran each dispatch. Another
-agent must resume from memory plus artifacts. Engram unavailable: say so
-once and continue.
+After each phase and each gate decision, loops included, call the Engram
+MCP tool `mem_save` titled `Delivery <phase>: <change>`, with the phase
+output verbatim and the agent each dispatch ran on. Another agent must
+resume from memory plus artifacts. Engram unavailable: say so once.
