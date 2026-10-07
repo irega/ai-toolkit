@@ -28,9 +28,11 @@ files.
   `base=$(git merge-base HEAD origin/main || git merge-base HEAD main)`,
   then `git diff --stat "$base"` for the size.
 
-The diff **touches a trust boundary** when it changes authentication,
-authorization, parsing of user, network, or file input, secrets, shell,
-SQL, or path construction, deserialization, or permissions.
+The diff **touches a trust boundary** when it handles data from another
+user or the network: requests, authentication, authorization, secrets,
+uploaded or downloaded files, deserialization, or shell, SQL, or paths
+built from that data. Arguments of a local CLI run by its own user are
+not a trust boundary.
 
 ## Step 2: pick the passes
 
@@ -66,13 +68,15 @@ parallel when the runtime allows it.
 
 Each pass prompt carries: how to get the diff, its lenses with their
 "Looks for" or the skill to invoke, the acceptance criteria if any, the
-definition of critical below, "report only, do not edit any file", and the
-return shape per lens:
+definition of critical below, "report only, do not edit any file",
+"report only findings of your lenses", and the return shape per lens:
 `PASS`, or one line per finding with `path:line`, severity, problem, and a
 one-line fix.
 
 **Critical** means shipping it would cause a regression, a security hole,
-or an unmet acceptance criterion. Everything else is `non-critical`.
+or an unmet acceptance criterion. Everything else is `non-critical`,
+including a weak or missing test: the bug it misses is the critical
+finding.
 
 ## Step 4: ambiguous findings
 
@@ -83,7 +87,8 @@ subagent) and keep its answer.
 ## Rule: report, never fix
 
 Copy findings as the passes returned them: none dropped, softened, or
-added. Edit no code, even for a one-line fix.
+added. A `path:line` reported by several passes stays once, under the
+first lens in the table. Edit no code, even for a one-line fix.
 
 | Excuse | Reality |
 |---|---|
