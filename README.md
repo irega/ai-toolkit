@@ -59,10 +59,16 @@ each installed CLI natively (eg: `claude mcp add`).
 | Server | Purpose |
 |--------|---------|
 | [playwright](https://github.com/microsoft/playwright-mcp) | Browser automation (Chrome extension mode) |
+| [Azure DevOps](https://github.com/microsoft/azure-devops-mcp) | Backlog, work items and pull requests (optional, one instance per configured organization) |
 
 Some servers may need env vars (e.g. an extension token). Copy `.env.example` to
 `.env.local` and fill it in before running `scripts/mcp/sync-mcp.sh` — values
 get injected into the server registration.
+
+To enable Azure DevOps MCP, set `AZURE_DEVOPS_ORGS=org-a,org-b` in `.env.local`.
+Sync registers one instance per organization in Codex, Claude, and OpenCode.
+Removed organizations are unregistered on sync; unset the variable to remove
+all managed Azure DevOps instances.
 
 ## Scripts
 

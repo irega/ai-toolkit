@@ -6,6 +6,13 @@
       "command": "npx",
       "args": ["@playwright/mcp@latest", "--browser", "chrome", "--extension"],
       "envKeys": ["PLAYWRIGHT_MCP_EXTENSION_TOKEN"]
+    },
+    {
+      "name": "azure-devops",
+      "type": "local",
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp", "${org}", "--authentication", "azcli"],
+      "organizationsEnv": "AZURE_DEVOPS_ORGS"
     }
   ]
 }
