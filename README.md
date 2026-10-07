@@ -46,7 +46,7 @@ into whichever of Claude Code/Codex/OpenCode are installed.
 | [implementing-tasks](skills/implementing-tasks/SKILL.md) | Implement a plan: test-first per task, RED/GREEN report |
 | [verifying-changes](skills/verifying-changes/SKILL.md) | Verify a change against its spec: repo checks, evidence per criterion, E2E, spec drift |
 | [reviewing-changes](skills/reviewing-changes/SKILL.md) | Review a diff from fresh context, one verdict per lens, report only |
-| [delivery-pr](skills/delivery-pr/SKILL.md) | Phase 5: size and open the draft PR(s) |
+| [opening-pull-requests](skills/opening-pull-requests/SKILL.md) | Open draft PRs: one per independent concern, repo template, English |
 | [Humanizer](https://github.com/blader/humanizer) | Rewrite AI-sounding prose to read naturally, installed cross-agent via `npx skills add` |
 | [Ponytail](https://github.com/DietrichGebert/ponytail) | Forces minimal, lazy-first code solutions, installed cross-agent via `npx skills add` |
 | [Superpowers](https://github.com/obra/superpowers) | Process skills (brainstorming, TDD, systematic debugging, plan writing, code review...), installed cross-agent via `npx skills add` |
