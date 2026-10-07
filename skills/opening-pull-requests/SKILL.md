@@ -73,7 +73,9 @@ Never invent a CLI or tool call this runtime does not have. Say which one
 opened each PR, or that none did, in the result.
 
 Match the title format to the repo: read `git log` and merged PRs. Use
-Conventional Commits when the history shows no convention.
+Conventional Commits when the history shows no convention. Commit messages
+follow the same convention and carry no AI or model attribution (no
+`Co-Authored-By` trailer).
 
 ## Result
 

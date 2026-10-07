@@ -1,6 +1,6 @@
 # Delivering changes: reference
 
-The orchestrator's reference for tiers, dispatch, commits, and Engram
+The orchestrator's reference for tiers, dispatch, phase outputs, and Engram
 checkpoints. Phase skills are standalone and do not link here.
 
 ## Contents
@@ -8,7 +8,6 @@ checkpoints. Phase skills are standalone and do not link here.
 - Tiers
 - Dispatch
 - Phase outputs
-- Commits
 - Engram checkpoints
 
 ## Tiers
@@ -73,12 +72,6 @@ tier and is the fail-open failure this contract forbids.
 | 4 | `verifying-changes` | `Verdict: PASS \| FAIL \| BLOCKED` |
 | 5 | `reviewing-changes` | `Verdict: PASS \| FAIL`, per-lens findings |
 | 6 | `opening-pull-requests` | `## Pull requests` per-PR result |
-
-## Commits
-
-Every commit in a run uses Conventional Commits (`feat:`, `fix:`, `docs:`,
-`chore:`, ...) and carries no AI or model attribution: no `Co-Authored-By`
-or similar trailer. Commits read as the operator's own work.
 
 ## Engram checkpoints
 

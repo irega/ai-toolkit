@@ -9,7 +9,7 @@ Orchestrator. Owns sequencing, gates, routing, tiers, and Engram
 checkpoints. Each phase skill does its own work and returns a fixed-shape
 output. Invoke it, read that output, enforce what happens between phases.
 Never redo a phase's work here. Orchestration decisions run at the
-`high_reasoning` tier. Tiers, dispatch rules, commits, and checkpoints:
+`high_reasoning` tier. Tiers, dispatch rules, and checkpoints:
 `references/contract.md`.
 
 ```
