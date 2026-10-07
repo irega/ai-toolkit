@@ -46,7 +46,8 @@ failing names, and the decisive error line. None defined: report
 
 For each criterion, name the evidence: a test that asserts it, a command
 output, or an E2E result. Passing tests that do not assert the criterion
-are not evidence. No evidence: `unmet`.
+are not evidence. Nothing asserts it, or the evidence shows it fails:
+`unmet`. Evidence cannot be obtained, such as a missing tool: `unverified`.
 
 Whether a criterion is met is unclear: dispatch that single judgment to
 `delivery-high-reasoning-high` if it exists (see Dispatch below).
@@ -60,7 +61,8 @@ For each criterion that describes a user-facing flow:
 2. No E2E covers it: drive the flow with Playwright MCP, even when unit
    tests pass. They do not prove the flow. Snapshots are noisy, so dispatch
    this to `delivery-standard-medium` if it exists (see Dispatch below).
-3. Playwright MCP unavailable: `missing evidence`. Never claim a pass.
+3. Playwright MCP unavailable or failing: `missing evidence`, and the
+   criterion is `unverified`. Never claim a pass.
 
 Other criteria never need E2E. Report results, not snapshots.
 
@@ -76,8 +78,10 @@ Compare the spec, the diff, the tests, and the E2E evidence:
 - **Unaccepted divergence:** a critical failure. Never edit the spec to
   match the code.
 
-Dispatch this comparison to `delivery-high-reasoning-high` if it exists
-(see Dispatch below).
+An explicit spec line settles the comparison: run it inline and write
+`reconciliation: inline` in `Dispatch`. Otherwise, such as behavior the
+spec does not mention or a doubtful acceptance, dispatch it to
+`delivery-high-reasoning-high` if it exists (see Dispatch below).
 
 ## Dispatch
 
@@ -90,7 +94,7 @@ overhead, so never dispatch for a few commands.
 ## Verdict
 
 `FAIL`: a failing check, an unmet criterion, or an unaccepted divergence.
-`BLOCKED`: no failures, but evidence is missing. Otherwise `PASS`.
+`BLOCKED`: no failures, but a criterion is `unverified`. Otherwise `PASS`.
 
 Use exactly this shape. The heading, the labels, and the fixed values stay
 in English, verbatim, in any conversation language. Only `<...>` slots are
@@ -100,10 +104,11 @@ free text.
 ## Verification: <branch> against <spec path>
 
 - Checks: `<command>` -> pass | fail: <failing names, decisive line>, one per line | none exist
-- Criterion <id>: met | unmet — <evidence or what is missing>
+- Criterion <id>: met | unmet | unverified — <evidence or what is missing>
 - E2E <id>: repo test `<name>` pass | fail | Playwright MCP pass | fail: <step> | missing evidence: <reason>
 - Reconciliation: no divergence | accepted change, spec updated: <path> | unaccepted divergence: <where, what>
 - Verdict: PASS | FAIL | BLOCKED
 - Failures: <failure>, one per line | none
-- Dispatch: <step>: <agent name> | generic subagent (effort unpinned), one per dispatch | none
+- Unverified: <criterion>: <what is missing>, one per line | none
+- Dispatch: <step>: <agent name> | generic subagent (effort unpinned) | inline, one line per step that dispatches or judges
 ```
