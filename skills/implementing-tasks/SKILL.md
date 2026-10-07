@@ -9,7 +9,7 @@ Input: a plan whose tasks have acceptance criteria and are marked
 independent or name what they depend on. No plan, or a task without
 acceptance criteria: stop and ask. Do not invent them.
 
-**Background:** superpowers:test-driven-development, when installed. Not
+`test-driven-development` installed: invoke it before the first task. Not
 installed: Rule 1 holds on its own; list it under `Degraded`.
 
 ```
