@@ -42,12 +42,16 @@
         ],
         "opencode": [
           {
-            "provider": "opencode-go",
-            "model": "minimax-m3"
+            "provider": "opencode",
+            "model": "minimax-m3.1-flash-free"
           },
           {
-            "provider": "opencode-go",
-            "model": "kimi-k2.7-code"
+            "provider": "opencode",
+            "model": "deepseek-v4.1-flash-free"
+          },
+          {
+            "provider": "opencode",
+            "model": "longcat-2.5-preview-free"
           }
         ]
       }
@@ -68,16 +72,12 @@
         ],
         "opencode": [
           {
-            "provider": "opencode-go",
-            "model": "deepseek-v4-flash"
+            "provider": "opencode",
+            "model": "glm-5.3-flash-free"
           },
           {
-            "provider": "opencode-go",
-            "model": "qwen3.8-flash"
-          },
-          {
-            "provider": "opencode-go",
-            "model": "glm-5.3-flash"
+            "provider": "opencode",
+            "model": "deepseek-v4.1-flash-free"
           }
         ]
       }
