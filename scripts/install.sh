@@ -21,6 +21,10 @@ echo "Setting up RTK..."
 if ! command -v rtk &>/dev/null; then
   echo "RTK not found, installing..."
   brew install rtk
+else
+  # Upgrade so `rtk init` writes plugins matching the installed agents
+  # (opencode 2 rejects the 1.x plugin export).
+  brew upgrade rtk || true
 fi
 rtk init -g --auto-patch
 if command -v opencode &>/dev/null; then
@@ -174,6 +178,8 @@ echo "Setting up Engram..."
 if ! command -v engram &>/dev/null; then
   echo "Engram not found, installing..."
   brew install gentleman-programming/tap/engram
+else
+  brew upgrade gentleman-programming/tap/engram || true
 fi
 if command -v claude &>/dev/null; then
   claude plugin marketplace add Gentleman-Programming/engram
