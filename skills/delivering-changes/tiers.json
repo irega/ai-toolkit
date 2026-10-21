@@ -17,11 +17,10 @@
         "opencode": [
           {
             "provider": "opencode-go",
-            "model": "glm-5.3"
-          },
-          {
-            "provider": "opencode-go",
-            "model": "kimi-k3"
+            "model": "glm-5.3",
+            "variants": {
+              "high": "high"
+            }
           }
         ]
       }
@@ -43,15 +42,19 @@
         "opencode": [
           {
             "provider": "opencode",
-            "model": "minimax-m3.1-flash-free"
+            "model": "minimax-m3.1-flash-free",
+            "variants": {
+              "low": "low",
+              "medium": "medium"
+            }
           },
           {
             "provider": "opencode",
-            "model": "deepseek-v4.1-flash-free"
-          },
-          {
-            "provider": "opencode",
-            "model": "longcat-2.5-preview-free"
+            "model": "deepseek-v4.1-flash-free",
+            "variants": {
+              "low": "low",
+              "medium": "high"
+            }
           }
         ]
       }
@@ -73,11 +76,17 @@
         "opencode": [
           {
             "provider": "opencode",
-            "model": "glm-5.3-flash-free"
+            "model": "glm-5.3-flash-free",
+            "variants": {
+              "low": "low"
+            }
           },
           {
             "provider": "opencode",
-            "model": "deepseek-v4.1-flash-free"
+            "model": "deepseek-v4.1-flash-free",
+            "variants": {
+              "low": "low"
+            }
           }
         ]
       }

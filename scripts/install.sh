@@ -70,6 +70,9 @@ echo ""
 # agent is the only channel that pins either.
 echo "Generating pinned agents from tiers.json..."
 bash "$REPO_SCRIPTS/agents/sync-agents.sh"
+# Remove agents a previous tiers.json generated, so a dispatcher listing a
+# tier's agents cannot pick a dropped candidate.
+bash "$REPO_SCRIPTS/agents/prune-agents.sh"
 
 echo ""
 
