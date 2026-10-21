@@ -38,6 +38,7 @@ names are never suffixed.
   which CLIs are installed, since a leftover can outlive an uninstall.
 
 After editing `tiers.json`, run `sync-agents.sh`, then `prune-agents.sh`.
+`scripts/install.sh` runs both.
 
 ## OpenCode effort
 
