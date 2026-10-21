@@ -26,6 +26,7 @@ else
   # (opencode 2 rejects the 1.x plugin export).
   brew upgrade rtk || true
 fi
+bash "$REPO_SCRIPTS/install-rtk-proxy.sh"
 rtk init -g --auto-patch
 if command -v opencode &>/dev/null; then
   rtk init -g --opencode
