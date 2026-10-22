@@ -57,10 +57,18 @@ reproduce its structure yourself. None: write a Summary and Test plan body.
 
 ## Rule 4: show structure when it helps
 
-For a change touching more than one file, add a file tree, call tree, small
-diagram, or before/after diff when it reads faster than prose. `show-me`
-installed: invoke it. Not installed: use a markdown tree or diff block in
-the body, and list `show-me` under `Degraded`.
+For a change touching more than one file, add a view when it reads faster
+than prose. Pick the smallest one that makes the point, usually one, at
+most two:
+- File tree, shallow, one comment per entry: which files own what.
+- Call tree, indented: runtime control flow.
+- `diff` of a file tree, call tree, or state flow: what changes in a shape
+  that already exists.
+- Mermaid `sequenceDiagram` or `flowchart`: interaction between
+  components. GitHub only; on other hosts use a tree or `diff`.
+
+Put each view next to the sentence it supports. Keep only the files,
+calls, and boundaries the reviewer needs.
 
 ## Rule 5: use a tool that reaches the remote's host, or write a fallback file
 
