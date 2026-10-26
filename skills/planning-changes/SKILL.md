@@ -61,6 +61,16 @@ locations. Never write `docs/superpowers/` unless step 1 picked it.
 Write no artifact file until the user approves the design in chat. With
 OpenSpec, settle open questions in `/opsx:explore` before `/opsx:propose`.
 
+**The user supplies a plan or spec.** The design is theirs: skip
+brainstorming and `/opsx:explore`. Converting it still adds things the user
+has not seen. Before writing any file, show in chat what you add or change
+(missing parts such as Tests, inferred criteria, task order, open questions,
+contradictions with the repo) and wait for explicit approval.
+
+| Excuse | Reality |
+|---|---|
+| "The user gave me a full plan, so it is approved" | The plan is approved. Your conversion of it is not. |
+
 A required sub-skill not installed: ask the clarifying questions yourself,
 one at a time, propose 2–3 approaches with a recommendation, and get
 approval. List only missing sub-skills under `Degraded`.
