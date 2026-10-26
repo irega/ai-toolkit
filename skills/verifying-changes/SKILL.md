@@ -49,6 +49,9 @@ output, or an E2E result. Passing tests that do not assert the criterion
 are not evidence. Nothing asserts it, or the evidence shows it fails:
 `unmet`. Evidence cannot be obtained, such as a missing tool: `unverified`.
 
+A criterion marked `needs an open PR: <how to check it>` that cannot be
+checked yet is `pending PR`, not `unverified`. No check given: `unverified`.
+
 Whether a criterion is met is unclear: dispatch that single judgment to
 `delivery-high-reasoning-high` if it exists (see Dispatch below).
 
@@ -98,6 +101,7 @@ overhead, so never dispatch for a few commands.
 
 `FAIL`: a failing check, an unmet criterion, or an unaccepted divergence.
 `BLOCKED`: no failures, but a criterion is `unverified`. Otherwise `PASS`.
+A `pending PR` criterion never causes `BLOCKED`.
 
 Use exactly this shape. The heading, the labels, and the fixed values stay
 in English, verbatim, in any conversation language. Only `<...>` slots are
@@ -107,11 +111,12 @@ free text.
 ## Verification: <branch> against <spec path>
 
 - Checks: `<command>` -> pass | fail: <failing names, decisive line>, one per line | none exist
-- Criterion <id>: met | unmet | unverified — <evidence or what is missing>
+- Criterion <id>: met | unmet | unverified | pending PR — <evidence, what is missing, or how to check it>
 - E2E <id>: repo test `<name>` pass | fail | Playwright MCP pass | fail: <step> | missing evidence: <reason>
 - Reconciliation: no divergence | accepted change, spec updated: <path> | unaccepted divergence: <where, what>
 - Verdict: PASS | FAIL | BLOCKED
 - Failures: <failure>, one per line | none
 - Unverified: <criterion>: <what is missing>, one per line | none
+- Pending PR: <criterion>: <how to check it>, one per line | none
 - Dispatch: <step>: <agent name> | generic subagent (effort unpinned) | inline, one line per step that dispatches or judges
 ```

@@ -44,7 +44,9 @@ infer a verdict from passing checks.
 
 - Verify `FAIL` or review `FAIL`: route each failure or critical finding
   to `implementing-tasks`. Never patch it here.
-- Verify `BLOCKED`: stop and ask the operator.
+- Verify `BLOCKED`: stop and ask the operator. Never open the PR past it.
+- A `pending PR` criterion does not block step 6. After step 6, check each
+  one as the plan says. A failure re-enters the loop below.
 - Non-critical findings go into the PR body as follow-ups.
 - Loop 3 to 5 until both verdicts are `PASS`. Only then run step 6.
 - Any change after a gate decision, with the PR already open, re-enters
@@ -67,7 +69,7 @@ invoking its skill directly, outside this workflow.
 | "The subagent is blocked, I'll finish it" | Never inline a dispatch. Retry with the blocker's context, or escalate. |
 
 **Red flags:** code before a plan artifact; a phase started before the
-previous one saved its output; a PR before both verdicts are `PASS`; this
+previous one saved its output; a PR before both verdicts are `PASS`; step 6 after `BLOCKED`; this
 session doing a blocked subagent's work; attribution in a dispatch prompt; commit, push, or `gh pr create` from
 this session; an edit after a verdict that skips the 3 to 5 loop.
 

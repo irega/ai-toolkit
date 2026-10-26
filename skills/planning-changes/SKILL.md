@@ -89,6 +89,10 @@ The artifact must cover five parts. Map each part onto the convention:
 
 A part with nothing in it still appears, written as `none identified`.
 
+A criterion that can be checked only once a pull request is open (CI on
+`pull_request`, a preview deploy) ends with `needs an open PR: <how to
+check it>`. Without that check, it is a normal criterion.
+
 ## 4. Write the report
 
 The report is this skill's output. Use exactly this shape. The heading,
