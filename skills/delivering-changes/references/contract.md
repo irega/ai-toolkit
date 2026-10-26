@@ -40,12 +40,21 @@ model, so its tier is advisory.
 Dispatch to the pinned agent `delivery-<tier>-<effort>`, never a generic
 subagent when the pinned one exists. A tier with several candidates for
 this runtime has one agent per candidate, `delivery-<tier>-<effort>--<model>`
-(today only OpenCode). List those agents and pick one uniformly at random.
-A single candidate keeps the plain name. How the agents are generated:
-`scripts/agents/README.md`.
+(today only OpenCode). A single candidate keeps the plain name. How the
+agents are generated: `scripts/agents/README.md`.
+
+**Picking a name.** Take names only from the runtime's agent list (the
+`task` tool's agent list, or the agent files, for OpenCode
+`~/.config/opencode/agents/`). Keep those that start with
+`delivery-<tier>-<effort>`. Copy the chosen name verbatim. Never compose a
+name from the pattern above or from a model seen in another tier: the
+runtime rejects it with `Unknown agent`. With several matches, draw one at
+random for each dispatch, with a shell draw when one is available
+(`ls ~/.config/opencode/agents/delivery-standard-low--* | sort -R | head -1`).
+Never choose by model, by order, or for diversity across passes.
 
 **Retry.** A candidate that errors at call time (rate limit, no credit,
-unavailable): retry with another `--<model>` agent of the same tier,
+unavailable): retry with another agent from that same filtered list,
 not the one that failed.
 None left: report the failure. Never drop to another tier. Record the
 agent used, and any retry, in the phase's Engram checkpoint.

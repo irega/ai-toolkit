@@ -52,8 +52,11 @@ subagents only when 2 or more independent tasks are ready at once and each
 is expected to change about 150 lines or more, tests included. Run every
 other task in sequence here.
 
-Dispatch to the `delivery-standard-medium` agent if it exists (with
-`delivery-standard-medium--<model>` variants, pick one at random).
+Dispatch to the `delivery-standard-medium` agent if it exists. With
+`delivery-standard-medium--<model>` variants, draw one at random per
+subagent (a shell draw such as `sort -R | head -1` when available), never
+by model. Copy names verbatim from the runtime's agent list; never compose
+one.
 Otherwise use a generic subagent, which inherits this session's model.
 Each subagent gets these rules and the skills this run uses.
 
