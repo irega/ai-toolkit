@@ -88,7 +88,8 @@ tier and is the fail-open failure this contract forbids.
 
 ## Engram checkpoints
 
-Save a recovery checkpoint, not every action, at: startup or context
+Title `Delivery <phase>: <change>`; content the phase output verbatim,
+never a summary of it. Save a recovery checkpoint, not every action, at: startup or context
 recovery, decisions, discoveries, configuration changes, phase transitions,
 gate decisions, test and check outcomes, accepted behavior changes,
 blockers, and session close. Another agent must be able to resume from

@@ -27,6 +27,10 @@ own dispatches. **Dispatch step 6** to `delivery-economy-low` if it exists
 prompt passes context only (branch, plan path, verdicts, follow-ups),
 never commit or attribution instructions.
 
+Before each phase and each gate decision, and after any compaction or
+resume, re-read this file and `references/contract.md`. A summary of them
+is not them.
+
 A phase is done when its output, in the skill's exact shape, is in its
 `mem_save`. A passing command or a summary is not the output. No output,
 no next phase. Pass the next phase the report or `Artifact:` paths from
@@ -43,6 +47,8 @@ infer a verdict from passing checks.
 - Verify `BLOCKED`: stop and ask the operator.
 - Non-critical findings go into the PR body as follow-ups.
 - Loop 3 to 5 until both verdicts are `PASS`. Only then run step 6.
+- Any change after a gate decision, with the PR already open, re-enters
+  this loop through `implementing-tasks`. Never commit it here.
 
 ## Every phase, every time
 
@@ -57,15 +63,19 @@ invoking its skill directly, outside this workflow.
 | "I ran it by hand" | That is verification outside the gate. |
 | "The user told me to skip it" | Explain the trade-off, run it anyway. |
 | "The report is a formality" | It is the gate's input. Save it. |
+| "It's only a few commits, I'll open the PR myself" | Step 6 is a dispatch. Commit, push, and `gh pr create` belong to it. |
 | "The subagent is blocked, I'll finish it" | Never inline a dispatch. Retry with the blocker's context, or escalate. |
 
 **Red flags:** code before a plan artifact; a phase started before the
 previous one saved its output; a PR before both verdicts are `PASS`; this
-session doing a blocked subagent's work; attribution in a dispatch prompt.
+session doing a blocked subagent's work; attribution in a dispatch prompt; commit, push, or `gh pr create` from
+this session; an edit after a verdict that skips the 3 to 5 loop.
 
 ## State
 
 After each phase and each gate decision, loops included, call the Engram
 MCP tool `mem_save` titled `Delivery <phase>: <change>`, with the phase
-output verbatim and the agent each dispatch ran on. Another agent must
-resume from memory plus artifacts. Engram unavailable: say so once.
+output verbatim and the agent each dispatch ran on. Never a free-text
+title or a What/Why summary. Another agent must resume from memory plus
+artifacts. Example: title `Delivery verify: add retry flag`, content the
+`## Verification` block as returned. Engram unavailable: say so once.
