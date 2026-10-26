@@ -58,8 +58,10 @@ verdict per lens. Otherwise one pass per row.
 ## Step 3: dispatch to a fresh context
 
 - The pinned agent exists (check `~/.claude/agents/`, or the runtime's
-  agent list; with `--<model>` variants, pick one at random): dispatch to
-  it by name.
+  agent list): dispatch to it by name. With `--<model>` variants, draw one
+  at random per pass (a shell draw such as `sort -R | head -1` when
+  available), never by model or for diversity. Copy names verbatim from
+  the agent list; never compose one.
 - It does not exist: use a generic subagent and record
   `generic subagent (effort unpinned)`.
 - No subagent support: stop and give the user a prompt to run in a new
