@@ -40,6 +40,14 @@ names are never suffixed.
 After editing `tiers.json`, run `sync-agents.sh`, then `prune-agents.sh`.
 `scripts/install.sh` runs both.
 
+## OpenCode model check
+
+`sync-agents-opencode.sh` fails, writing nothing, when a candidate is
+missing from `opencode models`. A listed model can still fail upstream, and
+a variant the model doesn't accept fails too, so after editing OpenCode
+candidates run `sync-agents-opencode.sh --probe`. It sends one short
+request per (candidate, variant) and stops at the first error.
+
 ## OpenCode effort
 
 OpenCode `variant` values are defined by each model. The generator writes
