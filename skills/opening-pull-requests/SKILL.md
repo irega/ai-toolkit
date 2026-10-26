@@ -84,6 +84,12 @@ Pick the tool by the remote's host:
   per PR: `# <title>` on the first line, a blank line, then the body. A
   title given only in chat is a dropped title.
 
+A failed push or an auth error stops that push. Report the exact error to
+the user and write the fallback file. Never change git or `gh` configuration
+to make a push pass: credential helpers, remotes, URL rewrites,
+`gh auth setup-git`, global or repo config. A one-off `git -c` override or
+an explicit URL is a change too.
+
 Never invent a CLI or tool call this runtime does not have. Say which one
 opened each PR, or that none did, in the result.
 
