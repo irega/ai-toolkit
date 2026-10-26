@@ -133,3 +133,24 @@ valid_agent_names() {
     done
   done
 }
+
+# probe_model <provider/model[#variant]>
+# Sends one short request through `opencode run`. Succeeds when the model
+# replies; otherwise prints the error (or a timeout note) and fails. Runs
+# from a temp dir so the probe session doesn't attach to this repo.
+probe_model() {
+  local spec="$1" dir out err
+  dir="$(mktemp -d)"
+  out="$(cd "$dir" && perl -e 'alarm shift; exec @ARGV' 120 \
+    opencode run --format json -m "$spec" "Reply with exactly: OK" 2>&1 || true)"
+  rmdir "$dir" 2>/dev/null || true
+  err="$(jq -rR 'fromjson? | select(.type == "error") | .error.message' <<<"$out" | head -1)"
+  if [ -n "$err" ]; then
+    echo "$err"
+    return 1
+  fi
+  if ! jq -eR 'fromjson? | select(.type == "text")' <<<"$out" >/dev/null; then
+    echo "no reply within 120s"
+    return 1
+  fi
+}

@@ -24,9 +24,41 @@ set -euo pipefail
 # candidate uniformly at random" rule possible for OpenCode: the dispatcher
 # picks which agent *file* to call, since there is no per-call model
 # override to pick a model after the fact.
+#
+# Before writing anything, every candidate must appear in `opencode models`.
+# A model OpenCode dropped otherwise ships as an agent that only fails at
+# dispatch time ("Model unavailable"). Listing is not proof the model
+# answers: a listed model can still fail upstream, and a variant name the
+# model doesn't accept fails too. `--probe` sends one short request per
+# (candidate, variant) pair and fails on any error, at the cost of a few
+# seconds of network per pair.
 
 source "$(dirname "$0")/lib.sh"
 preflight
+
+probe=0
+[ "${1:-}" = "--probe" ] && probe=1
+
+if command -v opencode &>/dev/null; then
+  available=" $(opencode models | tr '\n' ' ') "
+  missing=()
+  for tier in $(tier_names); do
+    count="$(candidate_count "$tier" opencode)"
+    for ((i = 0; i < count; i++)); do
+      spec="$(candidate_field_at "$tier" opencode "$i" provider)/$(candidate_field_at "$tier" opencode "$i" model)"
+      [[ "$available" == *" $spec "* ]] || missing+=("$spec ($tier)")
+    done
+  done
+  if [ "${#missing[@]}" -gt 0 ]; then
+    echo "ERROR: tiers.json lists opencode models that \`opencode models\` does not:"
+    printf '    %s\n' "${missing[@]}"
+    echo "    Replace them in skills/delivering-changes/tiers.json, then re-run."
+    echo "    No agents were written."
+    exit 1
+  fi
+else
+  echo "WARNING: opencode CLI not found, candidate models not checked against \`opencode models\`"
+fi
 
 DEST="$HOME/.config/opencode/agents"
 mkdir -p "$DEST"
@@ -60,6 +92,14 @@ for tier in $(tier_names); do
         variant_line="$DROP_MARKER"
         note="effort NOT pinned"
         unpinned+=("$name")
+      fi
+
+      if [ "$probe" -eq 1 ]; then
+        spec="$provider/$model${variant:+#$variant}"
+        if ! err="$(probe_model "$spec")"; then
+          echo "ERROR: probe failed for $spec ($name): $err"
+          exit 1
+        fi
       fi
 
       render "$TEMPLATES/opencode.md" \
