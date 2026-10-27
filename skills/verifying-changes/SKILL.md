@@ -90,8 +90,10 @@ spec does not mention or a doubtful acceptance, dispatch it to
 ## Dispatch
 
 Each dispatch goes to the pinned agent named above if it exists. With
-`<agent>--<model>` variants, draw one at random per dispatch (a shell draw
-such as `sort -R | head -1` when available), never by model. Copy names
+`<agent>--<model>` variants, draw one at random per dispatch: run a shell
+draw such as `sort -R | head -1` when available and dispatch to the name it
+prints. Listing the agents and picking one is not a draw. Never pick by
+model. Copy names
 verbatim from the runtime's agent list; never compose one. Otherwise use a generic
 subagent, which inherits this session's model; the verdict says so. All
 other work runs inline. A dispatch costs about 25k tokens of fixed

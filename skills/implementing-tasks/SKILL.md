@@ -54,8 +54,9 @@ other task in sequence here.
 
 Dispatch to the `delivery-standard-medium` agent if it exists. With
 `delivery-standard-medium--<model>` variants, draw one at random per
-subagent (a shell draw such as `sort -R | head -1` when available), never
-by model. Copy names verbatim from the runtime's agent list; never compose
+subagent: run a shell draw such as `sort -R | head -1` when available and
+dispatch to the name it prints. Listing the agents and picking one is not
+a draw. Never pick by model. Copy names verbatim from the runtime's agent list; never compose
 one.
 Otherwise use a generic subagent, which inherits this session's model.
 Each subagent gets these rules and the skills this run uses.
