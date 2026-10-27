@@ -49,8 +49,11 @@ infer a verdict from passing checks.
   one as the plan says. A failure re-enters the loop below.
 - Non-critical findings go into the PR body as follow-ups.
 - Loop 3 to 5 until both verdicts are `PASS`. Only then run step 6.
-- Any change after a gate decision, with the PR already open, re-enters
-  this loop through `implementing-tasks`. Never commit it here.
+- Every code, config, or test edit in this run goes through
+  `implementing-tasks`, whatever asked for it: a gate failure, a fix found
+  while verifying, a non-critical finding the user wants fixed now, or any
+  other user request. Then verify and review run again. Never edit or
+  commit here, not even "small" config needed to run a check.
 
 ## Every phase, every time
 
@@ -71,13 +74,16 @@ invoking its skill directly, outside this workflow.
 **Red flags:** code before a plan artifact; a phase started before the
 previous one saved its output; a PR before both verdicts are `PASS`; step 6 after `BLOCKED`; this
 session doing a blocked subagent's work; attribution in a dispatch prompt; commit, push, or `gh pr create` from
-this session; an edit after a verdict that skips the 3 to 5 loop.
+this session; an edit outside `implementing-tasks`; an edit after a verdict that skips the 3 to 5 loop;
+a phase output shown to the user, or a question asked, before its `mem_save`.
 
 ## State
 
 After each phase and each gate decision, loops included, call the Engram
 MCP tool `mem_save` titled `Delivery <phase>: <change>`, with the phase
-output verbatim and the agent each dispatch ran on. Never a free-text
+output verbatim and the agent each dispatch ran on. Save before the
+reply that shows the output or asks the user anything; a question after a
+phase never replaces its checkpoint. Never a free-text
 title or a What/Why summary. Another agent must resume from memory plus
 artifacts. Example: title `Delivery verify: add retry flag`, content the
 `## Verification` block as returned. Engram unavailable: say so once.
