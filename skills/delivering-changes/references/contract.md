@@ -50,7 +50,9 @@ agents are generated: `scripts/agents/README.md`.
 name from the pattern above or from a model seen in another tier: the
 runtime rejects it with `Unknown agent`. With several matches, draw one at
 random for each dispatch, with a shell draw when one is available
-(`ls ~/.config/opencode/agents/delivery-standard-low--* | sort -R | head -1`).
+(`ls ~/.config/opencode/agents/delivery-standard-low--* | sort -R | head -1`),
+and dispatch to the name it prints. Listing the agents and picking one is
+not a draw; several passes need one draw each.
 Never choose by model, by order, or for diversity across passes.
 
 **Retry.** A candidate that errors at call time (rate limit, no credit,
